@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
+import { flushSync } from "react-dom";
 import Image from "next/image";
 import {
   HeartIcon,
@@ -72,7 +73,11 @@ export default function Home() {
     );
 
     const transition = doc.startViewTransition(() => {
-      setTheme(newTheme);
+      flushSync(() => {
+        setTheme(newTheme);
+      });
+      // Manually set attribute to ensure immediate DOM update for the transition snapshot
+      document.documentElement.setAttribute('data-theme', newTheme);
       localStorage.setItem('theme', newTheme);
     });
 
