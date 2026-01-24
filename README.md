@@ -1,36 +1,56 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Portfolio Architect: Chris Kang [中文翻译] (Chris Kang 的作品集)
 
-## Getting Started
+Minimalist, high-end personal portfolio built with a focus on performance and aesthetics.
 
-First, run the development server:
+## 技术栈 [Tech Stack]
+
+- **Framework**: Next.js 16 (App Router + Turbopack)
+- **Library**: React 19
+- **Styling**: Tailwind CSS 4
+- **Animations**: Native CSS Transitions & View Transition API
+- **Icons**: Phosphor Icons
+- **Language**: TypeScript
+
+## 设计美学 [Design Aesthetic]
+
+遵循 **"Code Lover"** 风格：
+- 🌓 **双主题支持**: 完美的深色 (#030303) 与浅色 (#fdfdfd) 模式切换。
+- 🐶 **趣味交互**: 包含 "Woof!" 音效文字反馈与物理倾倒动画的法斗主题开关。
+- ✨ **精致动效**: 
+    - 滚动时自动变形的**胶囊导航岛**。
+    - 基于 View Transition API 的**原生圆形扩散**转场。
+    - 模拟滚轮的平滑章节跳转。
+    - 极致丝滑的 CSS 物理弹簧过渡。
+
+## 运行 [Getting Started]
 
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## 核心特性 [Core Features]
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+- 🚀 **性能第一**: 移除 Framer Motion，全面转向原生 CSS 与 API，极致轻量。
+- 🎨 **自适应导航**: 
+    - 首屏：全宽面板。
+    - 滚动：悬浮胶囊 + 自动出现的一键回顶箭头。
+- 📱 **响应式设计**: 完美适配各种屏幕尺寸。
+- 💾 **状态持久化**: 主题偏好自动保存至 LocalStorage。
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## 目录结构 [Directory Structure]
 
-## Learn More
+```
+src/
+├── app/
+│   ├── globals.css      # 全局样式与 View Transition 动画定义
+│   ├── layout.tsx       # 应用布局
+│   └── page.tsx         # 主页面逻辑（包含所有交互与组件）
+├── components/          # 独立组件 (SocialIcon, Typewriter 等)
+└── lib/                 # 工具函数 (cn, utils)
+public/
+├── avator/              # 头像资源
+└── icons/               # 图标资源 (bulldog.png)
+```
 
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Designed & Built by Chris Kang.
