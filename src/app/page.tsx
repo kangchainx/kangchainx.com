@@ -37,39 +37,39 @@ interface DocumentWithViewTransition extends Document {
 
 export default function Home() {
   const [scrolled, setScrolled] = useState(false);
-  const [theme, setTheme] = useState<'dark' | 'light'>('dark');
+  const [theme, setTheme] = useState<"dark" | "light">("dark");
   const [isBarking, setIsBarking] = useState(false);
-  const [isTilting, setIsTilting] = useState<'left' | 'right' | null>(null);
+  const [isTilting, setIsTilting] = useState<"left" | "right" | null>(null);
   const [isSnowing, setIsSnowing] = useState(false);
 
   const avatarUrl = "/avator/avator_03.png";
 
   const toggleTheme = (e: React.MouseEvent<HTMLButtonElement>) => {
-    const newTheme = theme === 'dark' ? 'light' : 'dark';
-    
+    const newTheme = theme === "dark" ? "light" : "dark";
+
     const doc = document as unknown as DocumentWithViewTransition;
 
     // Check if View Transition API is supported
     if (!doc.startViewTransition) {
       setTheme(newTheme);
-      localStorage.setItem('theme', newTheme);
+      localStorage.setItem("theme", newTheme);
       return;
     }
 
     const x = e.clientX;
     const y = e.clientY;
-    
+
     // Trigger bark effect
     setIsBarking(true);
     setTimeout(() => setIsBarking(false), 800);
 
     // Trigger tilt effect
-    setIsTilting(newTheme === 'dark' ? 'left' : 'right');
+    setIsTilting(newTheme === "dark" ? "left" : "right");
     setTimeout(() => setIsTilting(null), 600);
 
     const endRadius = Math.hypot(
       Math.max(x, window.innerWidth - x),
-      Math.max(y, window.innerHeight - y)
+      Math.max(y, window.innerHeight - y),
     );
 
     const transition = doc.startViewTransition(() => {
@@ -77,8 +77,8 @@ export default function Home() {
         setTheme(newTheme);
       });
       // Manually set attribute to ensure immediate DOM update for the transition snapshot
-      document.documentElement.setAttribute('data-theme', newTheme);
-      localStorage.setItem('theme', newTheme);
+      document.documentElement.setAttribute("data-theme", newTheme);
+      localStorage.setItem("theme", newTheme);
     });
 
     transition.ready.then(() => {
@@ -86,7 +86,7 @@ export default function Home() {
         `circle(0px at ${x}px ${y}px)`,
         `circle(${endRadius}px at ${x}px ${y}px)`,
       ];
-      
+
       document.documentElement.animate(
         {
           clipPath: clipPath,
@@ -95,14 +95,14 @@ export default function Home() {
           duration: 1000,
           easing: "ease-in-out",
           pseudoElement: "::view-transition-new(root)",
-        }
+        },
       );
     });
   };
 
   useEffect(() => {
     // Check localStorage on mount
-    const savedTheme = localStorage.getItem('theme') as 'dark' | 'light' | null;
+    const savedTheme = localStorage.getItem("theme") as "dark" | "light" | null;
     if (savedTheme) {
       setTheme(savedTheme);
     }
@@ -110,8 +110,8 @@ export default function Home() {
   }, []); // Only run once
 
   useEffect(() => {
-    document.documentElement.setAttribute('data-theme', theme);
-    if (theme === 'light') {
+    document.documentElement.setAttribute("data-theme", theme);
+    if (theme === "light") {
       setIsSnowing(false);
     }
   }, [theme]);
@@ -144,11 +144,15 @@ export default function Home() {
         "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&q=80&w=1000",
     },
   ];
-  const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>, id: string) => {
+  const handleNavClick = (
+    e: React.MouseEvent<HTMLAnchorElement>,
+    id: string,
+  ) => {
     e.preventDefault();
     const element = document.getElementById(id);
     if (element) {
-      const offsetTop = element.getBoundingClientRect().top + window.scrollY - 100; // Offset for header
+      const offsetTop =
+        element.getBoundingClientRect().top + window.scrollY - 100; // Offset for header
       window.scrollTo({
         top: offsetTop,
         behavior: "smooth",
@@ -177,48 +181,88 @@ export default function Home() {
       {/* Navigation Island */}
       <div className="fixed top-8 left-0 w-full z-50 pointer-events-none">
         <div className="max-w-7xl mx-auto px-6 flex justify-between items-center relative">
-          
-          <div className={`pointer-events-auto flex items-center gap-3 transition-all duration-700 ${scrolled ? 'translate-x-[calc(50vw-230px)] sm:translate-x-[calc(50vw-280px)] opacity-0 invisible' : 'translate-x-0'}`}>
+          <div
+            className={`pointer-events-auto flex items-center gap-3 transition-all duration-700 ${scrolled ? "translate-x-[calc(50vw-230px)] sm:translate-x-[calc(50vw-280px)] opacity-0 invisible" : "translate-x-0"}`}
+          >
             <div className="w-10 h-10 rounded-2xl bg-zinc-900 border border-white/10 flex items-center justify-center text-red-500 shadow-2xl group hover:border-red-500/50 transition-colors">
-              <HeartIcon weight="fill" size={18} className="group-hover:scale-110 transition-all duration-300" />
+              <HeartIcon
+                weight="fill"
+                size={18}
+                className="group-hover:scale-110 transition-all duration-300"
+              />
             </div>
             <div className="flex items-center">
-              <span className="text-foreground font-bold tracking-[0.2em] text-sm uppercase whitespace-nowrap">Code Lover</span>
+              <span className="text-foreground font-bold tracking-[0.2em] text-sm uppercase whitespace-nowrap">
+                Code Lover
+              </span>
             </div>
           </div>
 
-          <div className={`pointer-events-auto absolute left-1/2 -translate-x-1/2 transition-all duration-700 ease-[cubic-bezier(0.23,1,0.32,1)] ${scrolled ? 'w-[320px] sm:w-[480px] bg-card backdrop-blur-2xl border border-border rounded-full py-2 px-6 shadow-[0_20px_50px_rgba(0,0,0,0.5)]' : 'w-auto bg-card backdrop-blur-md border border-border rounded-full py-3 px-8'}`}>
+          <div
+            className={`pointer-events-auto absolute left-1/2 -translate-x-1/2 transition-all duration-700 ease-[cubic-bezier(0.23,1,0.32,1)] ${scrolled ? "w-[320px] sm:w-[480px] bg-card backdrop-blur-2xl border border-border rounded-full py-2 px-6 shadow-[0_20px_50px_rgba(0,0,0,0.5)]" : "w-auto bg-card backdrop-blur-md border border-border rounded-full py-3 px-8"}`}
+          >
             <div className="flex items-center justify-center gap-8 relative">
-              <div className={`transition-all duration-500 overflow-hidden flex items-center shrink-0 ${scrolled ? 'w-7 opacity-100' : 'w-0 opacity-0'}`}>
-                 <div className="w-7 h-7 rounded-full border border-white/20 p-0.5 overflow-hidden bg-zinc-800">
-                    <Image src={avatarUrl} alt="Chris Kang" width={28} height={28} className="w-full h-full object-cover rounded-full" />
-                 </div>
+              <div
+                className={`transition-all duration-500 overflow-hidden flex items-center shrink-0 ${scrolled ? "w-7 opacity-100" : "w-0 opacity-0"}`}
+              >
+                <div className="w-7 h-7 rounded-full border border-white/20 p-0.5 overflow-hidden bg-zinc-800">
+                  <Image
+                    src={avatarUrl}
+                    alt="Chris Kang"
+                    width={28}
+                    height={28}
+                    className="w-full h-full object-cover rounded-full"
+                  />
+                </div>
               </div>
               <div className="flex items-center gap-6 text-[10px] font-bold uppercase tracking-[0.2em]">
-                <a href="#about" onClick={(e) => handleNavClick(e, 'about')} className="text-zinc-500 hover:text-foreground transition-colors">About</a>
-                <a href="#projects" onClick={(e) => handleNavClick(e, 'projects')} className="text-zinc-500 hover:text-foreground transition-colors">Projects</a>
-                <a href="#contact" onClick={(e) => handleNavClick(e, 'contact')} className="text-zinc-500 hover:text-foreground transition-colors">Contact</a>
+                <a
+                  href="#about"
+                  onClick={(e) => handleNavClick(e, "about")}
+                  className="text-zinc-500 hover:text-foreground transition-colors"
+                >
+                  About
+                </a>
+                <a
+                  href="#projects"
+                  onClick={(e) => handleNavClick(e, "projects")}
+                  className="text-zinc-500 hover:text-foreground transition-colors"
+                >
+                  Projects
+                </a>
+                <a
+                  href="#contact"
+                  onClick={(e) => handleNavClick(e, "contact")}
+                  className="text-zinc-500 hover:text-foreground transition-colors"
+                >
+                  Contact
+                </a>
               </div>
-              <div className={`transition-all duration-500 overflow-hidden flex items-center shrink-0 ${scrolled ? 'w-7 opacity-100' : 'w-0 opacity-0'}`}>
+              <div
+                className={`transition-all duration-500 overflow-hidden flex items-center shrink-0 ${scrolled ? "w-7 opacity-100" : "w-0 opacity-0"}`}
+              >
                 <div className="relative group">
-                  <button 
+                  <button
                     onClick={toggleTheme}
                     className="w-7 h-7 flex items-center justify-center transition-transform hover:scale-110"
                   >
-                    <Image 
+                    <Image
                       src="/icons/french-bulldog.png"
                       alt="Theme Toggle"
                       width={28}
                       height={28}
                       className={`w-full h-full object-contain transition-transform duration-500 ease-in-out ${
-                        isTilting === 'left' ? '-rotate-45' : 
-                        isTilting === 'right' ? 'rotate-45' : 'rotate-0'
+                        isTilting === "left"
+                          ? "-rotate-45"
+                          : isTilting === "right"
+                            ? "rotate-45"
+                            : "rotate-0"
                       }`}
                     />
                   </button>
                   {/* Tooltip */}
                   <span className="absolute -top-8 left-1/2 -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-opacity text-[10px] bg-zinc-900 text-white px-2 py-1 rounded shadow-lg pointer-events-none whitespace-nowrap">
-                    {theme === 'dark' ? 'Light' : 'Dark'}
+                    {theme === "dark" ? "Light" : "Dark"}
                   </span>
                   {/* Bark Effect */}
                   {isBarking && (
@@ -228,44 +272,54 @@ export default function Home() {
                   )}
                 </div>
               </div>
-              
+
               {/* Scroll to Top Arrow */}
-              <div className={`absolute -bottom-12 left-1/2 -translate-x-1/2 transition-all duration-500 ${scrolled ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-2 pointer-events-none'}`}>
-                 <button onClick={scrollToTop} className="text-zinc-500 hover:text-foreground transition-colors p-1">
-                    <CaretUpIcon size={14} weight="bold" />
-                 </button>
+              <div
+                className={`absolute -bottom-12 left-1/2 -translate-x-1/2 transition-all duration-500 ${scrolled ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-2 pointer-events-none"}`}
+              >
+                <button
+                  onClick={scrollToTop}
+                  className="text-zinc-500 hover:text-foreground transition-colors p-1"
+                >
+                  <CaretUpIcon size={14} weight="bold" />
+                </button>
               </div>
             </div>
           </div>
 
-          <div className={`hidden md:flex pointer-events-auto items-center gap-4 transition-all duration-700 ${scrolled ? 'translate-x-[-calc(50vw-280px)] opacity-0 invisible' : 'translate-x-0'}`}>
-             <div className="relative group">
-               <button 
-                 onClick={toggleTheme}
-                 className="w-8 h-8 flex items-center justify-center transition-all duration-500 hover:scale-110 active:scale-95"
-               >
-                  <Image 
-                    src="/icons/french-bulldog.png"
-                    alt="Theme Toggle"
-                    width={32}
-                    height={32}
-                    className={`w-full h-full object-contain transition-transform duration-500 ease-in-out ${
-                      isTilting === 'left' ? '-rotate-45' : 
-                      isTilting === 'right' ? 'rotate-45' : 'rotate-0'
-                    }`}
-                  />
-               </button>
-               {/* Tooltip */}
-               <span className="absolute top-full mt-2 left-1/2 -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-opacity text-[10px] bg-zinc-900/90 text-white px-2 py-1 rounded shadow-lg pointer-events-none whitespace-nowrap backdrop-blur-sm">
-                 {theme === 'dark' ? 'Light' : 'Dark'}
-               </span>
-               {/* Bark Effect */}
-               {isBarking && (
-                 <span className="absolute top-0 -right-6 text-sm font-bold text-foreground animate-bark-fade pointer-events-none">
-                   Woof!
-                 </span>
-               )}
-             </div>
+          <div
+            className={`hidden md:flex pointer-events-auto items-center gap-4 transition-all duration-700 ${scrolled ? "translate-x-[-calc(50vw-280px)] opacity-0 invisible" : "translate-x-0"}`}
+          >
+            <div className="relative group">
+              <button
+                onClick={toggleTheme}
+                className="w-8 h-8 flex items-center justify-center transition-all duration-500 hover:scale-110 active:scale-95"
+              >
+                <Image
+                  src="/icons/french-bulldog.png"
+                  alt="Theme Toggle"
+                  width={32}
+                  height={32}
+                  className={`w-full h-full object-contain transition-transform duration-500 ease-in-out ${
+                    isTilting === "left"
+                      ? "-rotate-45"
+                      : isTilting === "right"
+                        ? "rotate-45"
+                        : "rotate-0"
+                  }`}
+                />
+              </button>
+              {/* Tooltip */}
+              <span className="absolute top-full mt-2 left-1/2 -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-opacity text-[10px] bg-zinc-900/90 text-white px-2 py-1 rounded shadow-lg pointer-events-none whitespace-nowrap backdrop-blur-sm">
+                {theme === "dark" ? "Light" : "Dark"}
+              </span>
+              {/* Bark Effect */}
+              {isBarking && (
+                <span className="absolute top-0 -right-6 text-sm font-bold text-foreground animate-bark-fade pointer-events-none">
+                  Woof!
+                </span>
+              )}
+            </div>
           </div>
         </div>
       </div>
@@ -273,7 +327,7 @@ export default function Home() {
       {/* Hero Section */}
       <section className="h-screen flex flex-col justify-center items-center px-6 max-w-5xl mx-auto relative text-center z-10">
         <div className="space-y-6 flex flex-col items-center w-full animate-fade-in-up">
-            <div className="relative mb-4">
+          <div className="relative mb-4">
             <div className="absolute inset-0 bg-blue-500/20 blur-2xl rounded-full scale-110"></div>
             <div className="w-24 h-24 md:w-28 md:h-28 rounded-[2.5rem] bg-card border-border shadow-2xl transition-all duration-300">
               <Image
@@ -287,7 +341,8 @@ export default function Home() {
           </div>
 
           <h1 className="text-3xl md:text-5xl font-bold text-foreground tracking-tight animate-fade-in-up">
-            Hi, I&apos;m Chris Kang <span className="animate-waving-hand inline-block">👋</span>
+            Hi, I&apos;m Chris Kang{" "}
+            <span className="animate-waving-hand inline-block">👋</span>
           </h1>
 
           <div className="text-lg md:text-2xl font-medium text-zinc-500 leading-relaxed min-h-[1.6em] max-w-2xl">
@@ -518,23 +573,7 @@ export default function Home() {
           <h2 className="text-6xl md:text-9xl font-black text-foreground tracking-tighter mb-20 opacity-10 hover:opacity-100 transition-all duration-1000 cursor-default uppercase">
             Let&apos;s Chat
           </h2>
-          <div className="flex flex-wrap justify-center gap-12 text-[10px] font-black tracking-[0.4em] uppercase text-zinc-600">
-            <a
-              href="https://github.com/kangchainx"
-              className="hover:text-blue-500 transition-colors text-foreground"
-            >
-              GitHub
-            </a>
-            <a
-              href="https://www.linkedin.com/in/kangchainh"
-              className="hover:text-blue-500 transition-colors text-foreground"
-            >
-              LinkedIn
-            </a>
-            <a href="#" className="hover:text-foreground transition-colors">
-              Read.cv
-            </a>
-          </div>
+
           <p className="mt-24 text-zinc-800 text-[9px] font-mono tracking-widest uppercase">
             Designed & Built by Chris Kang — 2026
           </p>
@@ -542,13 +581,17 @@ export default function Home() {
       </footer>
 
       {/* Snowflake Icon - Fixed Bottom Left */}
-      {theme === 'dark' && (
-        <button 
+      {theme === "dark" && (
+        <button
           onClick={() => setIsSnowing(!isSnowing)}
-          className={`fixed bottom-6 left-6 z-50 pointer-events-auto transition-all duration-300 hover:scale-110 ${isSnowing ? 'opacity-100 text-blue-500' : 'opacity-40 text-foreground hover:opacity-100'}`}
+          className={`fixed bottom-6 left-6 z-50 pointer-events-auto transition-all duration-300 hover:scale-110 ${isSnowing ? "opacity-100 text-blue-500" : "opacity-40 text-foreground hover:opacity-100"}`}
           aria-label="Toggle Snow Effect"
         >
-           <SnowflakeIcon size={24} weight={isSnowing ? "fill" : "duotone"} className={isSnowing ? "animate-spin" : "animate-spin-slow"} />
+          <SnowflakeIcon
+            size={24}
+            weight={isSnowing ? "fill" : "duotone"}
+            className={isSnowing ? "animate-spin" : "animate-spin-slow"}
+          />
         </button>
       )}
     </main>
