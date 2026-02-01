@@ -23,23 +23,21 @@ export const SocialIcon = ({
       href={href} 
       target="_blank" 
       rel="noopener noreferrer"
-      className={cn("group relative flex items-center justify-center p-2.5 transition-all duration-300", className)}
-      style={{ '--brand-color': brandColor } as React.CSSProperties}
+      className={cn("group relative flex items-center justify-center w-8 h-8 rounded-full transition-all duration-300 hover:scale-110 opacity-80 hover:opacity-100 shadow-sm hover:shadow-lg hover:-translate-y-1", className)}
+      style={{ backgroundColor: brandColor }}
     >
       {/* Tooltip - Native CSS */}
       <div 
-        className="absolute -top-10 left-1/2 -translate-x-1/2 px-2.5 py-1.5 bg-zinc-900 border border-white/10 rounded-lg pointer-events-none z-50 shadow-2xl transition-all duration-300 opacity-0 translate-y-2 group-hover:opacity-100 group-hover:translate-y-0"
+        className="absolute top-full mt-2 left-1/2 -translate-x-1/2 px-2.5 py-1.5 bg-zinc-900 border border-white/10 rounded-lg pointer-events-none z-50 shadow-2xl transition-all duration-300 opacity-0 -translate-y-2 group-hover:opacity-100 group-hover:translate-y-0"
       >
         <span className="text-[10px] font-bold text-white whitespace-nowrap tracking-widest uppercase">
           {title}
         </span>
-        <div className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-2 h-2 bg-zinc-900 border-r border-b border-white/10 rotate-45"></div>
+        <div className="absolute -top-1 left-1/2 -translate-x-1/2 w-2 h-2 bg-zinc-900 border-l border-t border-white/10 rotate-45"></div>
       </div>
 
       {/* Icon - Native CSS */}
-      <div 
-        className="text-zinc-500 transition-all duration-300 group-hover:text-[var(--brand-color)] group-hover:scale-110 group-active:scale-95"
-      >
+      <div className="text-white flex items-center justify-center">
         {children}
       </div>
     </a>
