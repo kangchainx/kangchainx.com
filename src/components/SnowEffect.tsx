@@ -7,7 +7,8 @@ export function SnowEffect() {
   const mountRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    if (!mountRef.current) return;
+    const mountNode = mountRef.current;
+    if (!mountNode) return;
 
     // --- Scene Setup ---
     const width = window.innerWidth;
@@ -27,7 +28,7 @@ export function SnowEffect() {
     renderer.setSize(width, height);
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
     renderer.setClearColor(0x000000, 0); // Fully transparent background
-    mountRef.current.appendChild(renderer.domElement);
+    mountNode.appendChild(renderer.domElement);
 
     // --- Snow Generation ---
     const particleCount = 800;
@@ -60,7 +61,7 @@ export function SnowEffect() {
 
     geometry.setAttribute("position", new THREE.BufferAttribute(positions, 3));
     // Important: mark as dynamic for frequent updates
-    geometry.attributes.position.setUsage(THREE.DynamicDrawUsage);
+    (geometry.attributes.position as THREE.BufferAttribute).setUsage(THREE.DynamicDrawUsage);
 
     // Texture generation
     const canvas = document.createElement("canvas");
@@ -138,8 +139,9 @@ export function SnowEffect() {
       }
 
       // CRITICAL: Explicitly mark the entire buffer for update
-      const positionAttribute = geometry.attributes.position;
-      positionAttribute.updateRange = { offset: 0, count: particleCount * 3 };
+      const positionAttribute = geometry.attributes.position as THREE.BufferAttribute;
+      positionAttribute.updateRanges = [{ start: 0, count: particleCount * 3 }];
+
       positionAttribute.needsUpdate = true;
       
       // Force geometry update
@@ -169,8 +171,8 @@ export function SnowEffect() {
       isRunning = false; // Stop the animation loop
       window.removeEventListener("resize", handleResize);
       cancelAnimationFrame(animationFrameId);
-      if (mountRef.current && renderer.domElement) {
-        mountRef.current.removeChild(renderer.domElement);
+      if (mountNode && renderer.domElement) {
+        mountNode.removeChild(renderer.domElement);
       }
       geometry.dispose();
       material.dispose();
