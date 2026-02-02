@@ -120,22 +120,28 @@ export default function Home() {
 
   const projects = [
     {
-      title: "Nova Dashboard",
-      category: "Fintech Solution",
-      image:
-        "https://images.unsplash.com/photo-1614850523296-d8c1af93d400?auto=format&fit=crop&q=80&w=1000",
+      title: "YouTube Analysis Platform",
+      category: "SaaS Platform / Creator Efficiency",
+      image: "/projec-shot/youtube-analysis-project.png",
+      link: "https://github.com/kangchainx/youtube-analysis-project",
     },
     {
-      title: "Aether OS",
-      category: "Conceptual UI/UX",
-      image:
-        "https://images.unsplash.com/photo-1633356122544-f134324a6cee?auto=format&fit=crop&q=80&w=1000",
+      title: "Video Text Extension",
+      category: "Privacy-First AI Tool / Chrome",
+      image: "/projec-shot/video-text-chrome-extension.png",
+      link: "https://github.com/kangchainx/video-text-chrome-extension",
     },
     {
-      title: "Zenith App",
-      category: "Mobile Productivity",
-      image:
-        "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&q=80&w=1000",
+      title: "GitHub README Studio",
+      category: "Developer Tool / Visualization",
+      image: "/projec-shot/github-readme-studio.png",
+      link: "https://github.com/kangchainx/github-readme-studio",
+    },
+    {
+      title: "GitHub Christmas Kit",
+      category: "Open Source / Holiday Theme",
+      image: "/projec-shot/github-christmas-kit.png",
+      link: "https://github.com/kangchainx",
     },
   ];
   const handleNavClick = (
@@ -199,7 +205,7 @@ export default function Home() {
               <div
                 className={`transition-all duration-500 overflow-hidden flex items-center shrink-0 ${scrolled ? "w-7 opacity-100" : "w-0 opacity-0"}`}
               >
-                <div className="w-7 h-7 rounded-full border border-white/20 p-0.5 overflow-hidden bg-zinc-800">
+                <div className="w-7 h-7 rounded-full border border-white/20 overflow-hidden">
                   <Image
                     src={avatarUrl}
                     alt="Chris Kang"
@@ -447,8 +453,7 @@ export default function Home() {
           {/* Motto */}
           <div className="pt-12">
             <p className="text-zinc-600 italic font-serif text-sm md:text-base tracking-wide max-w-lg opacity-80 border-l border-blue-500/30 pl-4">
-              &quot;Logic will get you from A to B. Imagination will take you
-              everywhere.&quot;
+              &quot;Make it work, make it right, make it fast.&quot;
             </p>
           </div>
         </div>
@@ -465,73 +470,76 @@ export default function Home() {
       >
         <div className="grid grid-cols-1 md:grid-cols-12 gap-12 items-start">
           <div className="md:col-span-4 sticky top-32 text-center md:text-left">
-            <h2 className="text-4xl md:text-6xl font-black text-foreground tracking-tighter mb-4 italic">
-              About Me<span className="text-blue-500">.</span>
+            <h2 className="text-4xl md:text-6xl font-black text-foreground tracking-tighter mb-4">
+              About Me
             </h2>
-            <p className="text-zinc-600 font-mono text-sm tracking-widest uppercase">
-              The Soul Behind the Code
-            </p>
           </div>
           <div className="md:col-span-8 space-y-12">
-            <p className="text-xl md:text-3xl font-light text-zinc-300 leading-relaxed">
-              Based in Tokyo, I am a software architect driven by the belief
-              that
-              <span className="text-foreground font-medium italic">
-                {" "}
-                beauty lies in performance.{" "}
-              </span>
-              I specialize in building full-stack applications that are as
-              robust on the backend as they are delightful on the frontend.
-            </p>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-8 pt-8">
-              <div className="space-y-4 group">
-                <div className="w-10 h-10 rounded-xl bg-card border-border flex items-center justify-center text-blue-500 group-hover:bg-blue-500 group-hover:text-white transition-all duration-500">
-                  <LayoutIcon size={20} />
-                </div>
-                <h4 className="text-foreground font-bold tracking-tight">
-                  Pixel-Perfect UI
-                </h4>
-                <p className="text-zinc-500 text-sm leading-relaxed">
-                  I craft interfaces that feel natural and intuitive, with a
-                  deep obsession for typography and motion.
-                </p>
-              </div>
-              <div className="space-y-4 group">
-                <div className="w-10 h-10 rounded-xl bg-card border-border flex items-center justify-center text-blue-500 group-hover:bg-blue-500 group-hover:text-white transition-all duration-500">
-                  <CodeIcon size={20} />
-                </div>
-                <h4 className="text-foreground font-bold tracking-tight">
-                  Robust Backend
-                </h4>
-                <p className="text-zinc-500 text-sm leading-relaxed">
-                  Designing scalable architectures and efficient databases is my
-                  core strength. I love solving complex logic.
-                </p>
-              </div>
-              <div className="space-y-4 group">
-                <div className="w-10 h-10 rounded-xl bg-card border-border flex items-center justify-center text-blue-500 group-hover:bg-blue-500 group-hover:text-white transition-all duration-500">
-                  <LightningIcon size={20} />
-                </div>
-                <h4 className="text-foreground font-bold tracking-tight">
-                  Performance First
-                </h4>
-                <p className="text-zinc-500 text-sm leading-relaxed">
-                  Fast is a feature. I optimize every line of code to ensure the
-                  highest performance benchmarks.
-                </p>
-              </div>
-              <div className="space-y-4 group">
-                <div className="w-10 h-10 rounded-xl bg-card border-border flex items-center justify-center text-blue-500 group-hover:bg-blue-500 group-hover:text-white transition-all duration-500">
-                  <GlobeIcon size={20} />
-                </div>
-                <h4 className="text-foreground font-bold tracking-tight">
-                  Global Scale
-                </h4>
-                <p className="text-zinc-500 text-sm leading-relaxed">
-                  Building with an international mindset, ensuring accessibility
-                  and cross-cultural user satisfaction.
-                </p>
-              </div>
+            <div className="space-y-6 text-lg md:text-xl text-foreground leading-relaxed font-medium">
+              <p>
+                Hello, I&apos;m <span className="text-foreground font-bold">Chris Kang</span>, a passionate{" "}
+                <span className="font-bold text-foreground">full-stack developer</span>. I enjoy programming and building delightful
+                products. I love to experiment with new technologies and use
+                them to solve real-world problems.
+              </p>
+              <ul className="space-y-3 mt-4">
+                <li className="flex items-start gap-3">
+                  <span className="shrink-0">🎒</span>
+                  <span>I am currently a freelancer.</span>
+                </li>
+                <li className="flex items-start gap-3">
+                  <span className="shrink-0">🎸</span>
+                  <span>An amateur guitarist.</span>
+                </li>
+                <li className="flex items-start gap-3">
+                  <span className="shrink-0">🐶</span>
+                  <span>I have a Frenchie named Tiantong.</span>
+                </li>
+                <li className="flex items-start gap-3">
+                  <span className="shrink-0">🤝</span>
+                  <span>Always open to new opportunities.</span>
+                </li>
+                <li className="flex items-start gap-3">
+                  <span className="shrink-0">👥</span>
+                  <span>
+                    I&apos;m actively looking to contribute to the open-source
+                    community
+                  </span>
+                </li>
+                <li className="flex items-start gap-3">
+                  <span className="shrink-0">👏</span>
+                  <span>
+                    Happy to connect, reach me via{" "}
+                    <a
+                      href="/QR/WeChatQRCode.JPG"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="font-bold text-blue-500 hover:text-blue-600 no-underline"
+                    >
+                      WeChat
+                    </a>{" "}
+                    or{" "}
+                    <a
+                      href="https://t.me/Chris_K_g"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="font-bold text-blue-500 hover:text-blue-600 no-underline"
+                    >
+                      Telegram
+                    </a>
+                    , or follow me on{" "}
+                    <a
+                      href="https://x.com/kangchainx"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="font-bold text-blue-500 hover:text-blue-600 no-underline"
+                    >
+                      X (Twitter)
+                    </a>{" "}
+                    to see what I&apos;m working on.
+                  </span>
+                </li>
+              </ul>
             </div>
 
             <div className="pt-8 border-t border-border flex flex-wrap gap-3">
@@ -563,28 +571,25 @@ export default function Home() {
         className="py-40 px-6 max-w-5xl mx-auto relative z-10"
       >
         <div className="flex flex-col md:flex-row justify-between items-end mb-24 gap-6">
-          <h2 className="text-4xl md:text-6xl font-black text-foreground tracking-tighter italic">
-            Selected Projects<span className="text-blue-500">.</span>
+          <h2 className="text-4xl md:text-6xl font-black text-foreground tracking-tighter">
+            Projects
           </h2>
-          <span className="text-zinc-700 font-mono text-sm tracking-widest uppercase mb-2">
-            Portfolio / 2026
-          </span>
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-x-16 gap-y-40">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
           {projects.map((project, index) => (
-            <div
+            <a
               key={index}
-              className={cn(
-                "group cursor-pointer",
-                index % 2 !== 0 ? "md:mt-48" : "",
-              )}
+              href={project.link}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="group cursor-pointer block"
             >
-              <div className="relative aspect-[4/5] overflow-hidden rounded-[2.5rem] bg-card border-border transition-colors duration-300">
+              <div className="relative aspect-[16/9] overflow-hidden rounded-[2.5rem] bg-card border-border transition-colors duration-300">
                 <Image
                   src={project.image}
                   alt={project.title}
                   fill
-                  className="w-full h-full object-cover grayscale opacity-20 group-hover:grayscale-0 group-hover:opacity-100 group-hover:scale-110 transition-all duration-[1.5s] ease-out"
+                  className="w-full h-full object-cover grayscale opacity-20 group-hover:grayscale-0 group-hover:opacity-100 group-hover:scale-105 transition-all duration-[0.8s] ease-out"
                 />
                 <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black/80"></div>
                 <div className="absolute inset-0 p-12 flex flex-col justify-end translate-y-6 group-hover:translate-y-0 transition-transform duration-700">
@@ -602,7 +607,7 @@ export default function Home() {
                   {project.category}
                 </p>
               </div>
-            </div>
+            </a>
           ))}
         </div>
       </section>
