@@ -11,16 +11,11 @@ import {
   LightningIcon,
   CaretDownIcon,
   CaretUpIcon,
-  LinkedinLogoIcon,
-  GithubLogoIcon,
-  EnvelopeIcon,
-  CoffeeIcon,
-  XLogoIcon,
-  TelegramLogoIcon,
   SnowflakeIcon,
 } from "@phosphor-icons/react";
 import { SocialIcon } from "@/components/SocialIcon";
 import { Typewriter } from "@/components/Typewriter";
+import { ContactForm } from "@/components/ContactForm";
 import { SnowEffect } from "@/components/SnowEffect";
 import { cn } from "@/lib/utils";
 
@@ -31,7 +26,7 @@ interface ViewTransition {
   skipTransition: () => void;
 }
 
-interface DocumentWithViewTransition extends Document {
+interface DocumentWithViewTransition {
   startViewTransition?: (callback: () => void) => ViewTransition;
 }
 
@@ -42,7 +37,7 @@ export default function Home() {
   const [isTilting, setIsTilting] = useState<"left" | "right" | null>(null);
   const [isSnowing, setIsSnowing] = useState(false);
 
-  const avatarUrl = "/avator/avator_03.png";
+  const avatarUrl = "/avator/Frenchie_lines.png";
 
   const toggleTheme = (e: React.MouseEvent<HTMLButtonElement>) => {
     const newTheme = theme === "dark" ? "light" : "dark";
@@ -52,6 +47,7 @@ export default function Home() {
     // Check if View Transition API is supported
     if (!doc.startViewTransition) {
       setTheme(newTheme);
+      if (newTheme === "light") setIsSnowing(false);
       localStorage.setItem("theme", newTheme);
       return;
     }
@@ -75,6 +71,7 @@ export default function Home() {
     const transition = doc.startViewTransition(() => {
       flushSync(() => {
         setTheme(newTheme);
+        if (newTheme === "light") setIsSnowing(false);
       });
       // Manually set attribute to ensure immediate DOM update for the transition snapshot
       document.documentElement.setAttribute("data-theme", newTheme);
@@ -104,16 +101,14 @@ export default function Home() {
     // Check localStorage on mount
     const savedTheme = localStorage.getItem("theme") as "dark" | "light" | null;
     if (savedTheme) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setTheme(savedTheme);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
   }, []); // Only run once
 
   useEffect(() => {
     document.documentElement.setAttribute("data-theme", theme);
-    if (theme === "light") {
-      setIsSnowing(false);
-    }
   }, [theme]);
 
   useEffect(() => {
@@ -126,22 +121,29 @@ export default function Home() {
 
   const projects = [
     {
-      title: "Nova Dashboard",
-      category: "Fintech Solution",
-      image:
-        "https://images.unsplash.com/photo-1614850523296-d8c1af93d400?auto=format&fit=crop&q=80&w=1000",
+      title: "YouTube Analysis Platform",
+      category: "SaaS Platform ｜ Creator Efficiency",
+      image: "/projec-shot/youtube-analysis-project.png",
+      link: "https://github.com/kangchainx/youtube-analysis-project",
     },
     {
-      title: "Aether OS",
-      category: "Conceptual UI/UX",
-      image:
-        "https://images.unsplash.com/photo-1633356122544-f134324a6cee?auto=format&fit=crop&q=80&w=1000",
+      title: "Video Text Chrome Extension",
+      category: "Privacy-First | AI-Powered",
+      image: "/projec-shot/video-text-chrome-extension.png",
+      link: "https://github.com/kangchainx/video-text-chrome-extension",
     },
     {
-      title: "Zenith App",
-      category: "Mobile Productivity",
-      image:
-        "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&q=80&w=1000",
+      title: "GitHub Studio",
+      // category: "Developer Tool / Visualization",
+      category: "WYSIWYG | Markdown Rendering",
+      image: "/projec-shot/github-readme-studio.png",
+      link: "https://github.com/kangchainx/github-readme-studio",
+    },
+    {
+      title: "GitHub Christmas Kit",
+      category: "Holiday Vibes | Creative Ideas",
+      image: "/projec-shot/github-christmas-kit.png",
+      link: "https://github.com/kangchainx",
     },
   ];
   const handleNavClick = (
@@ -205,7 +207,7 @@ export default function Home() {
               <div
                 className={`transition-all duration-500 overflow-hidden flex items-center shrink-0 ${scrolled ? "w-7 opacity-100" : "w-0 opacity-0"}`}
               >
-                <div className="w-7 h-7 rounded-full border border-white/20 p-0.5 overflow-hidden bg-zinc-800">
+                <div className="w-7 h-7 rounded-full border border-white/20 overflow-hidden">
                   <Image
                     src={avatarUrl}
                     alt="Chris Kang"
@@ -328,7 +330,7 @@ export default function Home() {
       <section className="h-screen flex flex-col justify-center items-center px-6 max-w-5xl mx-auto relative text-center z-10">
         <div className="space-y-6 flex flex-col items-center w-full animate-fade-in-up">
           <div className="relative mb-4">
-            <div className="absolute inset-0 bg-blue-500/20 blur-2xl rounded-full scale-110"></div>
+            <div className="absolute inset-0 blur-2xl rounded-full scale-110 bg-zinc-400/10 [html[data-theme=dark]_&]:bg-blue-500/20"></div>
             <div className="w-24 h-24 md:w-28 md:h-28 rounded-[2.5rem] bg-card border-border shadow-2xl transition-all duration-300">
               <Image
                 src={avatarUrl}
@@ -348,64 +350,112 @@ export default function Home() {
           <div className="text-lg md:text-2xl font-medium text-zinc-500 leading-relaxed min-h-[1.6em] max-w-2xl">
             <Typewriter
               texts={[
-                "I'm a full-stack developer crafting seamless digital experiences",
-                "I'm a minimalist polishing every single pixel",
-                "I'm a lifelong learner turning complex logic into art",
+                "an Indie Hacker",
+                "a Full-Stack Software Engineer",
+                "an AI-Powered Developer",
+                "a Frenchie Lover 🐶",
               ]}
             />
           </div>
 
           {/* Icon Group */}
-          <div className="flex items-center justify-center gap-3">
+          <div className="flex items-center justify-center gap-5">
             <SocialIcon
               href="https://github.com/kangchainx"
               title="GitHub"
-              brandColor="#FFFFFF"
+              brandColor="#181717"
             >
-              <GithubLogoIcon size={18} />
+              <svg
+                width="18"
+                height="18"
+                viewBox="0 0 256 256"
+                fill="currentColor"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path d="M208.31,75.68A59.78,59.78,0,0,0,202.93,28,8,8,0,0,0,196,24a59.75,59.75,0,0,0-48,24H124A59.75,59.75,0,0,0,76,24a8,8,0,0,0-6.93,4,59.78,59.78,0,0,0-5.38,47.68A58.14,58.14,0,0,0,56,104v8a56.06,56.06,0,0,0,48.44,55.47A39.8,39.8,0,0,0,96,192v8H72a24,24,0,0,1-24-24A40,40,0,0,0,8,136a8,8,0,0,0,0,16,24,24,0,0,1,24,24,40,40,0,0,0,40,40H96v16a8,8,0,0,0,16,0V192a24,24,0,0,1,48,0v40a8,8,0,0,0,16,0V192a39.8,39.8,0,0,0-8.44-24.53A56.06,56.06,0,0,0,216,112v-8A58.14,58.14,0,0,0,208.31,75.68ZM200,112a40,40,0,0,1-40,40H112a40,40,0,0,1-40-40v-8a41.74,41.74,0,0,1,6.9-22.48A8,8,0,0,0,80,73.83a43.81,43.81,0,0,1,.79-33.58,43.88,43.88,0,0,1,32.32,20.06A8,8,0,0,0,119.82,64h32.35a8,8,0,0,0,6.74-3.69,43.87,43.87,0,0,1,32.32-20.06A43.81,43.81,0,0,1,192,73.83a8.09,8.09,0,0,0,1,7.65A41.72,41.72,0,0,1,200,104Z" />
+              </svg>
             </SocialIcon>
             <SocialIcon
               href="https://www.linkedin.com/in/kangchainh"
               title="LinkedIn"
               brandColor="#0077B5"
             >
-              <LinkedinLogoIcon size={18} />
+              <svg
+                width="18"
+                height="18"
+                viewBox="0 0 256 256"
+                fill="currentColor"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path d="M216,24H40A16,16,0,0,0,24,40V216a16,16,0,0,0,16,16H216a16,16,0,0,0,16-16V40A16,16,0,0,0,216,24Zm0,192H40V40H216V216ZM96,112v64a8,8,0,0,1-16,0V112a8,8,0,0,1,16,0Zm88,28v36a8,8,0,0,1-16,0V140a20,20,0,0,0-40,0v36a8,8,0,0,1-16,0V112a8,8,0,0,1,15.79-1.78A36,36,0,0,1,184,140ZM100,84A12,12,0,1,1,88,72,12,12,0,0,1,100,84Z" />
+              </svg>
             </SocialIcon>
             <SocialIcon
               href="https://t.me/Chris_K_g"
               title="Telegram"
               brandColor="#24A1DE"
             >
-              <TelegramLogoIcon size={18} />
+              <svg
+                width="18"
+                height="18"
+                viewBox="0 0 256 256"
+                fill="currentColor"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path d="M228.88,26.19a9,9,0,0,0-9.16-1.57L17.06,103.93a14.22,14.22,0,0,0,2.43,27.21L72,141.45V200a15.92,15.92,0,0,0,10,14.83,15.91,15.91,0,0,0,17.51-3.73l25.32-26.26L165,220a15.88,15.88,0,0,0,10.51,4,16.3,16.3,0,0,0,5-.79,15.85,15.85,0,0,0,10.67-11.63L231.77,35A9,9,0,0,0,228.88,26.19Zm-61.14,36L78.15,126.35l-49.6-9.73ZM88,200V152.52l24.79,21.74Zm87.53,8L92.85,135.5l119-85.29Z" />
+              </svg>
             </SocialIcon>
             <SocialIcon
               href="mailto:kangchenhe666@gmail.com"
               title="Email"
               brandColor="#EA4335"
             >
-              <EnvelopeIcon size={18} />
+              <svg
+                width="18"
+                height="18"
+                viewBox="0 0 256 256"
+                fill="currentColor"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path d="M224,48H32a8,8,0,0,0-8,8V192a16,16,0,0,0,16,16H216a16,16,0,0,0,16-16V56A8,8,0,0,0,224,48ZM203.43,64,128,133.15,52.57,64ZM216,192H40V74.19l82.59,75.71a8,8,0,0,0,10.82,0L216,74.19V192Z" />
+              </svg>
             </SocialIcon>
             <SocialIcon
               href="https://x.com/kangchainx"
               title="X"
-              brandColor="#FFFFFF"
+              brandColor="#000000"
             >
-              <XLogoIcon size={16} />
+              <svg
+                width="16"
+                height="16"
+                viewBox="0 0 256 256"
+                fill="currentColor"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path d="M214.75,211.71l-62.6-98.38,61.77-67.95a8,8,0,0,0-11.84-10.76L143.24,99.34,102.75,35.71A8,8,0,0,0,96,32H48a8,8,0,0,0-6.75,12.3l62.6,98.37-61.77,68a8,8,0,1,0,11.84,10.76l58.84-64.72,40.49,63.63A8,8,0,0,0,160,224h48a8,8,0,0,0,6.75-12.29ZM164.39,208,62.57,48h29L193.43,208Z" />
+              </svg>
             </SocialIcon>
             <SocialIcon
               href="https://buymeacoffee.com/kangchainx"
               title="Coffee"
-              brandColor="#FFDD00"
+              brandColor="#C59D00"
             >
-              <CoffeeIcon size={18} />
+              <svg
+                width="18"
+                height="18"
+                viewBox="0 0 256 256"
+                fill="currentColor"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path d="M80,56V24a8,8,0,0,1,16,0V56a8,8,0,0,1-16,0Zm40,8a8,8,0,0,0,8-8V24a8,8,0,0,0-16,0V56A8,8,0,0,0,120,64Zm32,0a8,8,0,0,0,8-8V24a8,8,0,0,0-16,0V56A8,8,0,0,0,152,64Zm96,56v8a40,40,0,0,1-37.51,39.91,96.59,96.59,0,0,1-27,40.09H208a8,8,0,0,1,0,16H32a8,8,0,0,1,0-16H56.54A96.3,96.3,0,0,1,24,136V88a8,8,0,0,1,8-8H208A40,40,0,0,1,248,120ZM200,96H40v40a80.27,80.27,0,0,0,45.12,72h69.76A80.27,80.27,0,0,0,200,136Zm32,24a24,24,0,0,0-16-22.62V136a95.78,95.78,0,0,1-1.2,15A24,24,0,0,0,232,128Z" />
+              </svg>
             </SocialIcon>
           </div>
 
           {/* Motto */}
           <div className="pt-12">
             <p className="text-zinc-600 italic font-serif text-sm md:text-base tracking-wide max-w-lg opacity-80 border-l border-blue-500/30 pl-4">
-              &quot;Logic will get you from A to B. Imagination will take you
-              everywhere.&quot;
+              &quot;Make it work, make it right, make it fast.&quot;
             </p>
           </div>
         </div>
@@ -418,77 +468,80 @@ export default function Home() {
       {/* About Section */}
       <section
         id="about"
-        className="py-32 px-6 max-w-5xl mx-auto relative z-10 border-t border-white/5"
+        className="py-24 px-6 max-w-5xl mx-auto relative z-10 border-t border-white/5"
       >
         <div className="grid grid-cols-1 md:grid-cols-12 gap-12 items-start">
           <div className="md:col-span-4 sticky top-32 text-center md:text-left">
-            <h2 className="text-4xl md:text-6xl font-black text-foreground tracking-tighter mb-4 italic">
-              About Me<span className="text-blue-500">.</span>
+            <h2 className="text-4xl md:text-6xl font-black text-foreground tracking-tighter mb-4">
+              About Me
             </h2>
-            <p className="text-zinc-600 font-mono text-sm tracking-widest uppercase">
-              The Soul Behind the Code
-            </p>
           </div>
           <div className="md:col-span-8 space-y-12">
-            <p className="text-xl md:text-3xl font-light text-zinc-300 leading-relaxed">
-              Based in Tokyo, I am a software architect driven by the belief
-              that
-              <span className="text-foreground font-medium italic">
-                {" "}
-                beauty lies in performance.{" "}
-              </span>
-              I specialize in building full-stack applications that are as
-              robust on the backend as they are delightful on the frontend.
-            </p>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-8 pt-8">
-              <div className="space-y-4 group">
-                <div className="w-10 h-10 rounded-xl bg-card border-border flex items-center justify-center text-blue-500 group-hover:bg-blue-500 group-hover:text-white transition-all duration-500">
-                  <LayoutIcon size={20} />
-                </div>
-                <h4 className="text-foreground font-bold tracking-tight">
-                  Pixel-Perfect UI
-                </h4>
-                <p className="text-zinc-500 text-sm leading-relaxed">
-                  I craft interfaces that feel natural and intuitive, with a
-                  deep obsession for typography and motion.
-                </p>
-              </div>
-              <div className="space-y-4 group">
-                <div className="w-10 h-10 rounded-xl bg-card border-border flex items-center justify-center text-blue-500 group-hover:bg-blue-500 group-hover:text-white transition-all duration-500">
-                  <CodeIcon size={20} />
-                </div>
-                <h4 className="text-foreground font-bold tracking-tight">
-                  Robust Backend
-                </h4>
-                <p className="text-zinc-500 text-sm leading-relaxed">
-                  Designing scalable architectures and efficient databases is my
-                  core strength. I love solving complex logic.
-                </p>
-              </div>
-              <div className="space-y-4 group">
-                <div className="w-10 h-10 rounded-xl bg-card border-border flex items-center justify-center text-blue-500 group-hover:bg-blue-500 group-hover:text-white transition-all duration-500">
-                  <LightningIcon size={20} />
-                </div>
-                <h4 className="text-foreground font-bold tracking-tight">
-                  Performance First
-                </h4>
-                <p className="text-zinc-500 text-sm leading-relaxed">
-                  Fast is a feature. I optimize every line of code to ensure the
-                  highest performance benchmarks.
-                </p>
-              </div>
-              <div className="space-y-4 group">
-                <div className="w-10 h-10 rounded-xl bg-card border-border flex items-center justify-center text-blue-500 group-hover:bg-blue-500 group-hover:text-white transition-all duration-500">
-                  <GlobeIcon size={20} />
-                </div>
-                <h4 className="text-foreground font-bold tracking-tight">
-                  Global Scale
-                </h4>
-                <p className="text-zinc-500 text-sm leading-relaxed">
-                  Building with an international mindset, ensuring accessibility
-                  and cross-cultural user satisfaction.
-                </p>
-              </div>
+            <div className="space-y-6 text-lg md:text-xl text-foreground leading-relaxed font-medium">
+              <p>
+                Hello, I&apos;m <span className="text-foreground font-bold">Chris Kang</span>, a passionate{" "}
+                <span className="font-bold text-foreground">full-stack developer</span>. I enjoy programming and building delightful
+                products. I love to experiment with new technologies and use
+                them to solve real-world problems.
+              </p>
+              <ul className="space-y-3 mt-4">
+                <li className="flex items-start gap-3">
+                  <span className="shrink-0">🎒</span>
+                  <span>I am currently a freelancer.</span>
+                </li>
+                <li className="flex items-start gap-3">
+                  <span className="shrink-0">🎸</span>
+                  <span>An amateur guitarist.</span>
+                </li>
+                <li className="flex items-start gap-3">
+                  <span className="shrink-0">🐶</span>
+                  <span>I have a Frenchie named Tiantong.</span>
+                </li>
+                <li className="flex items-start gap-3">
+                  <span className="shrink-0">🤝</span>
+                  <span>Always open to new opportunities.</span>
+                </li>
+                <li className="flex items-start gap-3">
+                  <span className="shrink-0">👥</span>
+                  <span>
+                    I&apos;m actively looking to contribute to the open-source
+                    community
+                  </span>
+                </li>
+                <li className="flex items-start gap-3">
+                  <span className="shrink-0">👏</span>
+                  <span>
+                    Happy to connect, reach me via{" "}
+                    <a
+                      href="/QR/WeChatQRCode.JPG"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="font-bold text-blue-500 hover:text-blue-600 no-underline"
+                    >
+                      WeChat
+                    </a>{" "}
+                    or{" "}
+                    <a
+                      href="https://t.me/Chris_K_g"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="font-bold text-blue-500 hover:text-blue-600 no-underline"
+                    >
+                      Telegram
+                    </a>
+                    , or follow me on{" "}
+                    <a
+                      href="https://x.com/kangchainx"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="font-bold text-blue-500 hover:text-blue-600 no-underline"
+                    >
+                      X (Twitter)
+                    </a>{" "}
+                    to see what I&apos;m working on.
+                  </span>
+                </li>
+              </ul>
             </div>
 
             <div className="pt-8 border-t border-border flex flex-wrap gap-3">
@@ -516,39 +569,32 @@ export default function Home() {
 
       {/* Selected Projects Section */}
       <section
-        id="projects"
-        className="py-40 px-6 max-w-5xl mx-auto relative z-10"
+        className="py-24 px-6 max-w-5xl mx-auto relative z-10"
       >
-        <div className="flex flex-col md:flex-row justify-between items-end mb-24 gap-6">
-          <h2 className="text-4xl md:text-6xl font-black text-foreground tracking-tighter italic">
-            Selected Projects<span className="text-blue-500">.</span>
+        <div id="projects" className="flex flex-col md:flex-row justify-between items-end mb-24 gap-6">
+          <h2 className="text-4xl md:text-6xl font-black text-foreground tracking-tighter">
+            Projects
           </h2>
-          <span className="text-zinc-700 font-mono text-sm tracking-widest uppercase mb-2">
-            Portfolio / 2026
-          </span>
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-x-16 gap-y-40">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
           {projects.map((project, index) => (
-            <div
+            <a
               key={index}
-              className={cn(
-                "group cursor-pointer",
-                index % 2 !== 0 ? "md:mt-48" : "",
-              )}
+              href={project.link}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="group cursor-pointer block"
             >
-              <div className="relative aspect-[4/5] overflow-hidden rounded-[2.5rem] bg-card border-border transition-colors duration-300">
+              <div className="relative aspect-[16/9] overflow-hidden rounded-[2.5rem] bg-card border-border transition-colors duration-300">
                 <Image
                   src={project.image}
                   alt={project.title}
                   fill
-                  className="w-full h-full object-cover grayscale opacity-20 group-hover:grayscale-0 group-hover:opacity-100 group-hover:scale-110 transition-all duration-[1.5s] ease-out"
+                  className="w-full h-full object-cover grayscale opacity-20 group-hover:grayscale-0 group-hover:opacity-100 group-hover:scale-105 transition-all duration-[0.8s] ease-out"
                 />
                 <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black/80"></div>
                 <div className="absolute inset-0 p-12 flex flex-col justify-end translate-y-6 group-hover:translate-y-0 transition-transform duration-700">
-                  <span className="text-blue-500 font-mono text-[10px] mb-3 tracking-[0.2em] font-bold">
-                    CASE STUDY 0{index + 1}
-                  </span>
-                  <h3 className="text-foreground text-4xl font-bold tracking-tighter mb-4">
+                  <h3 className="text-foreground text-3xl font-bold tracking-tighter mb-4">
                     {project.title}
                   </h3>
                   <div className="w-0 group-hover:w-full h-[1px] bg-blue-500/50 transition-all duration-700"></div>
@@ -559,22 +605,28 @@ export default function Home() {
                   {project.category}
                 </p>
               </div>
-            </div>
+            </a>
           ))}
         </div>
       </section>
 
       {/* Footer */}
+      {/* Footer / Contact Section */}
       <footer
-        id="contact"
-        className="pt-60 pb-20 px-6 border-t border-white/5 relative z-10"
+        className="py-24 px-6 border-t border-white/5 relative z-10"
       >
-        <div className="max-w-5xl mx-auto text-center">
-          <h2 className="text-6xl md:text-9xl font-black text-foreground tracking-tighter mb-20 opacity-10 hover:opacity-100 transition-all duration-1000 cursor-default uppercase">
-            Let&apos;s Chat
-          </h2>
+        <div className="max-w-5xl mx-auto">
+          <div id="contact" className="flex flex-col md:flex-row justify-between items-end mb-24 gap-6">
+            <h2 className="text-4xl md:text-6xl font-black text-foreground tracking-tighter">
+              Contact
+            </h2>
+          </div>
 
-          <p className="mt-24 text-zinc-800 text-[9px] font-mono tracking-widest uppercase">
+          <div className="mb-24">
+            <ContactForm />
+          </div>
+
+          <p className="text-center text-zinc-800 text-[9px] font-mono tracking-widest uppercase">
             Designed & Built by Chris Kang — 2026
           </p>
         </div>
