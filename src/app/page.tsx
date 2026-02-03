@@ -15,6 +15,7 @@ import {
 } from "@phosphor-icons/react";
 import { SocialIcon } from "@/components/SocialIcon";
 import { Typewriter } from "@/components/Typewriter";
+import { ContactForm } from "@/components/ContactForm";
 import { SnowEffect } from "@/components/SnowEffect";
 import { cn } from "@/lib/utils";
 
@@ -121,25 +122,26 @@ export default function Home() {
   const projects = [
     {
       title: "YouTube Analysis Platform",
-      category: "SaaS Platform / Creator Efficiency",
+      category: "SaaS Platform ｜ Creator Efficiency",
       image: "/projec-shot/youtube-analysis-project.png",
       link: "https://github.com/kangchainx/youtube-analysis-project",
     },
     {
-      title: "Video Text Extension",
-      category: "Privacy-First AI Tool / Chrome",
+      title: "Video Text Chrome Extension",
+      category: "Privacy-First | AI-Powered",
       image: "/projec-shot/video-text-chrome-extension.png",
       link: "https://github.com/kangchainx/video-text-chrome-extension",
     },
     {
-      title: "GitHub README Studio",
-      category: "Developer Tool / Visualization",
+      title: "GitHub Studio",
+      // category: "Developer Tool / Visualization",
+      category: "WYSIWYG | Markdown Rendering",
       image: "/projec-shot/github-readme-studio.png",
       link: "https://github.com/kangchainx/github-readme-studio",
     },
     {
       title: "GitHub Christmas Kit",
-      category: "Open Source / Holiday Theme",
+      category: "Holiday Vibes | Creative Ideas",
       image: "/projec-shot/github-christmas-kit.png",
       link: "https://github.com/kangchainx",
     },
@@ -466,7 +468,7 @@ export default function Home() {
       {/* About Section */}
       <section
         id="about"
-        className="py-32 px-6 max-w-5xl mx-auto relative z-10 border-t border-white/5"
+        className="py-24 px-6 max-w-5xl mx-auto relative z-10 border-t border-white/5"
       >
         <div className="grid grid-cols-1 md:grid-cols-12 gap-12 items-start">
           <div className="md:col-span-4 sticky top-32 text-center md:text-left">
@@ -567,10 +569,9 @@ export default function Home() {
 
       {/* Selected Projects Section */}
       <section
-        id="projects"
-        className="py-40 px-6 max-w-5xl mx-auto relative z-10"
+        className="py-24 px-6 max-w-5xl mx-auto relative z-10"
       >
-        <div className="flex flex-col md:flex-row justify-between items-end mb-24 gap-6">
+        <div id="projects" className="flex flex-col md:flex-row justify-between items-end mb-24 gap-6">
           <h2 className="text-4xl md:text-6xl font-black text-foreground tracking-tighter">
             Projects
           </h2>
@@ -593,10 +594,7 @@ export default function Home() {
                 />
                 <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black/80"></div>
                 <div className="absolute inset-0 p-12 flex flex-col justify-end translate-y-6 group-hover:translate-y-0 transition-transform duration-700">
-                  <span className="text-blue-500 font-mono text-[10px] mb-3 tracking-[0.2em] font-bold">
-                    CASE STUDY 0{index + 1}
-                  </span>
-                  <h3 className="text-foreground text-4xl font-bold tracking-tighter mb-4">
+                  <h3 className="text-foreground text-3xl font-bold tracking-tighter mb-4">
                     {project.title}
                   </h3>
                   <div className="w-0 group-hover:w-full h-[1px] bg-blue-500/50 transition-all duration-700"></div>
@@ -613,16 +611,22 @@ export default function Home() {
       </section>
 
       {/* Footer */}
+      {/* Footer / Contact Section */}
       <footer
-        id="contact"
-        className="pt-60 pb-20 px-6 border-t border-white/5 relative z-10"
+        className="py-24 px-6 border-t border-white/5 relative z-10"
       >
-        <div className="max-w-5xl mx-auto text-center">
-          <h2 className="text-6xl md:text-9xl font-black text-foreground tracking-tighter mb-20 opacity-10 hover:opacity-100 transition-all duration-1000 cursor-default uppercase">
-            Let&apos;s Chat
-          </h2>
+        <div className="max-w-5xl mx-auto">
+          <div id="contact" className="flex flex-col md:flex-row justify-between items-end mb-24 gap-6">
+            <h2 className="text-4xl md:text-6xl font-black text-foreground tracking-tighter">
+              Contact
+            </h2>
+          </div>
 
-          <p className="mt-24 text-zinc-800 text-[9px] font-mono tracking-widest uppercase">
+          <div className="mb-24">
+            <ContactForm />
+          </div>
+
+          <p className="text-center text-zinc-800 text-[9px] font-mono tracking-widest uppercase">
             Designed & Built by Chris Kang — 2026
           </p>
         </div>
