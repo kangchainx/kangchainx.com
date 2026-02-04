@@ -172,7 +172,7 @@ export default function Home() {
       title: "GitHub Christmas Kit",
       category: "Holiday Vibes | Creative Ideas",
       image: "/projec-shot/github-christmas-kit.png",
-      link: "https://github.com/kangchainx",
+      link: "https://github.com/kangchainx/github-christmas-kit",
     },
   ];
   const handleNavClick = (
