@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Chris Kang | Full-stack Developer & UI Architect",
+  title: "Chris Kang | Developer",
   description:
     "Minimalist portfolio of Chris Kang, a Tokyo-based software architect who believes beauty lies in performance.",
   icons: {
@@ -23,7 +23,25 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" data-theme="dark" suppressHydrationWarning>
+    <html lang="en" suppressHydrationWarning>
+      <head>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              (function() {
+                try {
+                  var localTheme = localStorage.getItem('theme');
+                  if (localTheme) {
+                    document.documentElement.setAttribute('data-theme', localTheme);
+                  } else {
+                    document.documentElement.setAttribute('data-theme', 'dark');
+                  }
+                } catch (e) {}
+              })();
+            `,
+          }}
+        />
+      </head>
       <body className="antialiased">{children}</body>
     </html>
   );
