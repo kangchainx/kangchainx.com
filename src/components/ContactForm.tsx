@@ -9,10 +9,13 @@ import {
   CircleNotch,
   CheckCircle,
 } from "@phosphor-icons/react";
+import { sendEmail } from "@/app/actions";
+import { Turnstile } from "@marsidev/react-turnstile";
 
 export function ContactForm() {
   const [status, setStatus] = useState<"idle" | "sending" | "success">("idle");
   const [errors, setErrors] = useState<{ name?: string; email?: string; message?: string }>({});
+  const [turnstileToken, setTurnstileToken] = useState<string>("");
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -33,13 +36,27 @@ export function ContactForm() {
       return;
     }
 
+    if (!turnstileToken) {
+      alert("Please complete the security check.");
+      return;
+    }
+
     setErrors({});
     setStatus("sending");
 
-    // Mock API call
-    setTimeout(() => {
+    try {
+      const result = await sendEmail(formData);
+
+      if (result?.error) {
+        throw new Error(result.error);
+      }
+
       setStatus("success");
-    }, 1500);
+    } catch (error) {
+      console.error("Submission error:", error);
+      alert("Something went wrong. Please try again.");
+      setStatus("idle");
+    }
   };
 
   const handleInputChange = (field: keyof typeof errors) => {
@@ -62,7 +79,10 @@ export function ContactForm() {
           Thanks for reaching out. I&apos;ll get back to you as soon as possible.
         </p>
         <button
-          onClick={() => setStatus("idle")}
+          onClick={() => {
+            setStatus("idle");
+            setTurnstileToken("");
+          }}
           className="mt-8 px-6 py-2 text-sm font-medium text-zinc-500 hover:text-foreground transition-colors"
         >
           Send another message
@@ -170,10 +190,31 @@ export function ContactForm() {
           )}
         </div>
 
+        {/* Honeypot Field (Hidden) - Traps bots */}
+        <div className="hidden" aria-hidden="true">
+          <input
+            type="text"
+            name="confirm_email"
+            tabIndex={-1}
+            autoComplete="off"
+          />
+        </div>
+
+        {/* Turnstile Widget */}
+        <div className="flex justify-center">
+          <Turnstile
+            siteKey={process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY || ""}
+            onSuccess={(token) => setTurnstileToken(token)}
+            options={{
+              theme: "auto",
+            }}
+          />
+        </div>
+
         {/* Submit Button */}
         <button
           type="submit"
-          disabled={status === "sending"}
+          disabled={status === "sending" || !turnstileToken}
           className="w-full bg-zinc-900 text-white hover:bg-zinc-800 dark:bg-zinc-800 dark:text-zinc-100 dark:hover:bg-zinc-700 active:scale-[0.98] transition-all duration-200 rounded-xl py-4 font-bold tracking-wide flex items-center justify-center gap-2 shadow-lg hover:shadow-xl disabled:opacity-70 disabled:cursor-not-allowed disabled:transform-none"
         >
           {status === "sending" ? (

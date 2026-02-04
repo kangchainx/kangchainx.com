@@ -3,21 +3,11 @@
 import React, { useState, useEffect } from "react";
 import { flushSync } from "react-dom";
 import Image from "next/image";
-import {
-  HeartIcon,
-  GlobeIcon,
-  CodeIcon,
-  LayoutIcon,
-  LightningIcon,
-  CaretDownIcon,
-  CaretUpIcon,
-  SnowflakeIcon,
-} from "@phosphor-icons/react";
+import { HeartIcon, CaretDownIcon } from "@phosphor-icons/react";
 import { SocialIcon } from "@/components/SocialIcon";
 import { Typewriter } from "@/components/Typewriter";
 import { ContactForm } from "@/components/ContactForm";
-import { SnowEffect } from "@/components/SnowEffect";
-import { cn } from "@/lib/utils";
+import { TechStack } from "@/components/TechStack";
 
 // Define ViewTransition API types
 interface ViewTransition {
@@ -35,7 +25,9 @@ export default function Home() {
   const [theme, setTheme] = useState<"dark" | "light">("dark");
   const [isBarking, setIsBarking] = useState(false);
   const [isTilting, setIsTilting] = useState<"left" | "right" | null>(null);
-  const [isSnowing, setIsSnowing] = useState(false);
+
+  const [avatarRotation, setAvatarRotation] = useState(0);
+  const [hasShownScrollHint, setHasShownScrollHint] = useState(false);
 
   const avatarUrl = "/avator/Frenchie_lines.png";
 
@@ -47,7 +39,7 @@ export default function Home() {
     // Check if View Transition API is supported
     if (!doc.startViewTransition) {
       setTheme(newTheme);
-      if (newTheme === "light") setIsSnowing(false);
+
       localStorage.setItem("theme", newTheme);
       return;
     }
@@ -71,7 +63,6 @@ export default function Home() {
     const transition = doc.startViewTransition(() => {
       flushSync(() => {
         setTheme(newTheme);
-        if (newTheme === "light") setIsSnowing(false);
       });
       // Manually set attribute to ensure immediate DOM update for the transition snapshot
       document.documentElement.setAttribute("data-theme", newTheme);
@@ -104,7 +95,6 @@ export default function Home() {
       // eslint-disable-next-line react-hooks/set-state-in-effect
       setTheme(savedTheme);
     }
-
   }, []); // Only run once
 
   useEffect(() => {
@@ -112,11 +102,50 @@ export default function Home() {
   }, [theme]);
 
   useEffect(() => {
-    const handleScroll = () => setScrolled(window.scrollY > 80);
+    const handleScroll = () => {
+      const isScrolled = window.scrollY > 80;
+      setScrolled(isScrolled);
+      
+      // Trigger avatar rotation hint when first scrolled
+      if (isScrolled && !hasShownScrollHint) {
+        setHasShownScrollHint(true);
+        // Delay to allow the avatar to appear first
+        setTimeout(() => {
+          setAvatarRotation(prev => prev - 360);
+        }, 300);
+      }
+    };
     window.addEventListener("scroll", handleScroll);
     return () => {
       window.removeEventListener("scroll", handleScroll);
     };
+  }, [hasShownScrollHint]);
+
+  // Hint animation on page load (only when not scrolled)
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      // Only show animation if page is at top (not scrolled)
+      if (window.scrollY > 80) {
+        return;
+      }
+      
+      // Show Woof and start tilting
+      setIsBarking(true);
+      setIsTilting("left");
+      
+      // Tilt right (smooth transition)
+      setTimeout(() => {
+        setIsTilting("right");
+      }, 350);
+      
+      // Reset to normal
+      setTimeout(() => {
+        setIsTilting(null);
+        setIsBarking(false);
+      }, 700);
+    }, 1000);
+
+    return () => clearTimeout(timer);
   }, []);
 
   const projects = [
@@ -154,7 +183,7 @@ export default function Home() {
     const element = document.getElementById(id);
     if (element) {
       const offsetTop =
-        element.getBoundingClientRect().top + window.scrollY - 100; // Offset for header
+        element.getBoundingClientRect().top + window.scrollY - 30; // Offset for header
       window.scrollTo({
         top: offsetTop,
         behavior: "smooth",
@@ -169,6 +198,11 @@ export default function Home() {
     });
   };
 
+  const handleAvatarClick = () => {
+    setAvatarRotation((prev) => prev - 360);
+    scrollToTop();
+  };
+
   return (
     <main className="relative min-h-screen overflow-x-hidden scroll-smooth">
       {/* Background Layer */}
@@ -178,36 +212,40 @@ export default function Home() {
         <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-indigo-600/10 blur-[120px] rounded-full"></div>
       </div>
 
-      {isSnowing && <SnowEffect />}
-
       {/* Navigation Island */}
       <div className="fixed top-8 left-0 w-full z-50 pointer-events-none">
         <div className="max-w-7xl mx-auto px-6 flex justify-between items-center relative">
           <div
-            className={`pointer-events-auto flex items-center gap-3 transition-all duration-700 ${scrolled ? "translate-x-[calc(50vw-230px)] sm:translate-x-[calc(50vw-280px)] opacity-0 invisible" : "translate-x-0"}`}
+            className={`hidden md:flex pointer-events-auto items-center gap-3 transition-all duration-700 ${scrolled ? "translate-x-[calc(50vw-230px)] sm:translate-x-[calc(50vw-280px)] opacity-0 invisible" : "translate-x-0"}`}
           >
-            <div className="w-10 h-10 rounded-2xl bg-zinc-900 border border-white/10 flex items-center justify-center text-red-500 shadow-2xl group hover:border-red-500/50 transition-colors">
-              <HeartIcon
-                weight="fill"
-                size={18}
-                className="group-hover:scale-110 transition-all duration-300"
+            <div className="w-10 h-10 rounded-2xl border border-white/10 overflow-hidden shadow-2xl group transition-colors">
+              <Image
+                src={avatarUrl}
+                alt="Avatar"
+                width={40}
+                height={40}
+                className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
               />
             </div>
             <div className="flex items-center">
-              <span className="text-foreground font-bold tracking-[0.2em] text-sm uppercase whitespace-nowrap">
-                Code Lover
+              <span className="text-foreground font-bold tracking-[0.2em] text-sm whitespace-nowrap">
+                &lt;kangchainx /&gt;
               </span>
             </div>
           </div>
 
           <div
-            className={`pointer-events-auto absolute left-1/2 -translate-x-1/2 transition-all duration-700 ease-[cubic-bezier(0.23,1,0.32,1)] ${scrolled ? "w-[320px] sm:w-[480px] bg-card backdrop-blur-2xl border border-border rounded-full py-2 px-6 shadow-[0_20px_50px_rgba(0,0,0,0.5)]" : "w-auto bg-card backdrop-blur-md border border-border rounded-full py-3 px-8"}`}
+            className={`pointer-events-auto absolute left-1/2 -translate-x-1/2 transition-all duration-700 ease-[cubic-bezier(0.23,1,0.32,1)] ${scrolled ? "w-[360px] sm:w-[480px] bg-card backdrop-blur-2xl border border-border rounded-full py-2 px-6 shadow-[0_20px_50px_rgba(0,0,0,0.5)]" : "w-auto bg-card backdrop-blur-md border border-border rounded-full py-3 px-8"}`}
           >
             <div className="flex items-center justify-center gap-8 relative">
               <div
                 className={`transition-all duration-500 overflow-hidden flex items-center shrink-0 ${scrolled ? "w-7 opacity-100" : "w-0 opacity-0"}`}
               >
-                <div className="w-7 h-7 rounded-full border border-white/20 overflow-hidden">
+                <button
+                  onClick={handleAvatarClick}
+                  className="w-7 h-7 rounded-full border border-white/20 overflow-hidden cursor-pointer transition-transform duration-700 ease-in-out hover:scale-110"
+                  style={{ transform: `rotate(${avatarRotation}deg)` }}
+                >
                   <Image
                     src={avatarUrl}
                     alt="Chris Kang"
@@ -215,7 +253,7 @@ export default function Home() {
                     height={28}
                     className="w-full h-full object-cover rounded-full"
                   />
-                </div>
+                </button>
               </div>
               <div className="flex items-center gap-6 text-[10px] font-bold uppercase tracking-[0.2em]">
                 <a
@@ -273,18 +311,6 @@ export default function Home() {
                     </span>
                   )}
                 </div>
-              </div>
-
-              {/* Scroll to Top Arrow */}
-              <div
-                className={`absolute -bottom-12 left-1/2 -translate-x-1/2 transition-all duration-500 ${scrolled ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-2 pointer-events-none"}`}
-              >
-                <button
-                  onClick={scrollToTop}
-                  className="text-zinc-500 hover:text-foreground transition-colors p-1"
-                >
-                  <CaretUpIcon size={14} weight="bold" />
-                </button>
               </div>
             </div>
           </div>
@@ -460,7 +486,7 @@ export default function Home() {
           </div>
         </div>
 
-        <div className="absolute bottom-6 left-1/2 -translate-x-1/2 opacity-10 animate-bounce">
+        <div className="absolute bottom-6 left-1/2 -translate-x-1/2 opacity-50 animate-bounce">
           <CaretDownIcon size={28} className="text-foreground" />
         </div>
       </section>
@@ -468,21 +494,26 @@ export default function Home() {
       {/* About Section */}
       <section
         id="about"
-        className="py-24 px-6 max-w-5xl mx-auto relative z-10 border-t border-white/5"
+        className="py-16 lg:py-24 px-6 max-w-5xl mx-auto relative z-10 border-t border-white/5"
       >
-        <div className="grid grid-cols-1 md:grid-cols-12 gap-12 items-start">
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-8 lg:gap-12 items-start">
           <div className="md:col-span-4 sticky top-32 text-center md:text-left">
             <h2 className="text-4xl md:text-6xl font-black text-foreground tracking-tighter mb-4">
               About Me
             </h2>
           </div>
-          <div className="md:col-span-8 space-y-12">
+          <div className="md:col-span-8 space-y-6">
             <div className="space-y-6 text-lg md:text-xl text-foreground leading-relaxed font-medium">
               <p>
-                Hello, I&apos;m <span className="text-foreground font-bold">Chris Kang</span>, a passionate{" "}
-                <span className="font-bold text-foreground">full-stack developer</span>. I enjoy programming and building delightful
-                products. I love to experiment with new technologies and use
-                them to solve real-world problems.
+                Hello, I&apos;m{" "}
+                <span className="text-foreground font-bold">Chris Kang</span>, a
+                passionate{" "}
+                <span className="font-bold text-foreground">
+                  full-stack developer
+                </span>
+                . I enjoy programming and building delightful products. I love
+                to experiment with new technologies and use them to solve
+                real-world problems.
               </p>
               <ul className="space-y-3 mt-4">
                 <li className="flex items-start gap-3">
@@ -544,24 +575,21 @@ export default function Home() {
               </ul>
             </div>
 
-            <div className="pt-8 border-t border-border flex flex-wrap gap-3">
-              {[
-                "React",
-                "TypeScript",
-                "Node.js",
-                "Go",
-                "PostgreSQL",
-                "AWS",
-                "TailwindCSS",
-                "Figma",
-              ].map((tech) => (
-                <span
-                  key={tech}
-                  className="px-4 py-2 rounded-full bg-card border-border text-[10px] font-bold text-zinc-500 uppercase tracking-widest hover:border-blue-500 transition-colors cursor-default shadow-sm"
+            <div className="border-t border-white/5">
+              <div className="flex justify-end pt-2 mb-2">
+                <a
+                  href="/cv/ChrisKang_CV.pdf"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-zinc-500 hover:text-foreground transition-colors group"
                 >
-                  {tech}
-                </span>
-              ))}
+                  <span>View Resume</span>
+                  <span className="group-hover:translate-x-1 transition-transform">
+                    &rarr;
+                  </span>
+                </a>
+              </div>
+              <TechStack />
             </div>
           </div>
         </div>
@@ -569,14 +597,15 @@ export default function Home() {
 
       {/* Selected Projects Section */}
       <section
-        className="py-24 px-6 max-w-5xl mx-auto relative z-10"
+        id="projects"
+        className="py-16 lg:py-24 px-6 max-w-5xl mx-auto relative z-10"
       >
-        <div id="projects" className="flex flex-col md:flex-row justify-between items-end mb-24 gap-6">
+        <div className="flex flex-col md:flex-row justify-between items-center md:items-end mb-10 gap-6">
           <h2 className="text-4xl md:text-6xl font-black text-foreground tracking-tighter">
             Projects
           </h2>
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 2xl:gap-10">
           {projects.map((project, index) => (
             <a
               key={index}
@@ -585,7 +614,7 @@ export default function Home() {
               rel="noopener noreferrer"
               className="group cursor-pointer block"
             >
-              <div className="relative aspect-[16/9] overflow-hidden rounded-[2.5rem] bg-card border-border transition-colors duration-300">
+              <div className="relative aspect-[2/1] 2xl:aspect-[16/9] overflow-hidden rounded-[2.5rem] bg-card border-border transition-colors duration-300">
                 <Image
                   src={project.image}
                   alt={project.title}
@@ -593,8 +622,8 @@ export default function Home() {
                   className="w-full h-full object-cover grayscale opacity-20 group-hover:grayscale-0 group-hover:opacity-100 group-hover:scale-105 transition-all duration-[0.8s] ease-out"
                 />
                 <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black/80"></div>
-                <div className="absolute inset-0 p-12 flex flex-col justify-end translate-y-6 group-hover:translate-y-0 transition-transform duration-700">
-                  <h3 className="text-foreground text-3xl font-bold tracking-tighter mb-4">
+                <div className="absolute inset-0 p-6 2xl:p-12 flex flex-col justify-end translate-y-4 2xl:translate-y-6 group-hover:translate-y-0 transition-transform duration-700">
+                  <h3 className="text-foreground text-2xl 2xl:text-3xl font-bold tracking-tighter mb-4">
                     {project.title}
                   </h3>
                   <div className="w-0 group-hover:w-full h-[1px] bg-blue-500/50 transition-all duration-700"></div>
@@ -613,39 +642,25 @@ export default function Home() {
       {/* Footer */}
       {/* Footer / Contact Section */}
       <footer
-        className="py-24 px-6 border-t border-white/5 relative z-10"
+        id="contact"
+        className="py-16 lg:py-24 px-6 border-t border-white/5 relative z-10"
       >
         <div className="max-w-5xl mx-auto">
-          <div id="contact" className="flex flex-col md:flex-row justify-between items-end mb-24 gap-6">
+          <div className="flex flex-col md:flex-row justify-between items-center md:items-end mb-12 lg:mb-12 gap-6">
             <h2 className="text-4xl md:text-6xl font-black text-foreground tracking-tighter">
               Contact
             </h2>
           </div>
 
-          <div className="mb-24">
+          <div className="mb-12 lg:mb-24">
             <ContactForm />
           </div>
 
-          <p className="text-center text-zinc-800 text-[9px] font-mono tracking-widest uppercase">
-            Designed & Built by Chris Kang — 2026
+          <p className="text-center text-zinc-500 text-[10px] tracking-wider">
+            &copy; 2026 Chris Kang. All rights reserved.
           </p>
         </div>
       </footer>
-
-      {/* Snowflake Icon - Fixed Bottom Left */}
-      {theme === "dark" && (
-        <button
-          onClick={() => setIsSnowing(!isSnowing)}
-          className={`fixed bottom-6 left-6 z-50 pointer-events-auto transition-all duration-300 hover:scale-110 ${isSnowing ? "opacity-100 text-blue-500" : "opacity-40 text-foreground hover:opacity-100"}`}
-          aria-label="Toggle Snow Effect"
-        >
-          <SnowflakeIcon
-            size={24}
-            weight={isSnowing ? "fill" : "duotone"}
-            className={isSnowing ? "animate-spin" : "animate-spin-slow"}
-          />
-        </button>
-      )}
     </main>
   );
 }
