@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import {
   User,
   Envelope,
@@ -10,12 +10,13 @@ import {
   CheckCircle,
 } from "@phosphor-icons/react";
 import { sendEmail } from "@/app/actions";
-import { Turnstile } from "@marsidev/react-turnstile";
+import { Turnstile, type TurnstileInstance } from "@marsidev/react-turnstile";
 
 export function ContactForm() {
   const [status, setStatus] = useState<"idle" | "sending" | "success">("idle");
   const [errors, setErrors] = useState<{ name?: string; email?: string; message?: string }>({});
   const [turnstileToken, setTurnstileToken] = useState<string>("");
+  const turnstileRef = useRef<TurnstileInstance>(null);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -200,12 +201,22 @@ export function ContactForm() {
           />
         </div>
 
-        {/* Turnstile Widget - Invisible Mode */}
+        {/* Turnstile Widget - Invisible Mode with auto-execution on render */}
         <Turnstile
+          ref={turnstileRef}
           siteKey={process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY || ""}
           onSuccess={(token) => setTurnstileToken(token)}
+          onExpire={() => {
+            setTurnstileToken("");
+            turnstileRef.current?.reset();
+          }}
+          onError={() => {
+            setTurnstileToken("");
+            turnstileRef.current?.reset();
+          }}
           options={{
             size: "invisible",
+            execution: "render",
           }}
         />
 
