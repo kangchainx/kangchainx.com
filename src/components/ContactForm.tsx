@@ -212,7 +212,7 @@ export function ContactForm() {
         {/* Submit Button */}
         <button
           type="submit"
-          disabled={status === "sending" || !turnstileToken}
+          disabled={status === "sending"}
           className="w-full bg-zinc-900 text-white hover:bg-zinc-800 dark:bg-zinc-800 dark:text-zinc-100 dark:hover:bg-zinc-700 active:scale-[0.98] transition-all duration-200 rounded-xl py-4 font-bold tracking-wide flex items-center justify-center gap-2 shadow-lg hover:shadow-xl disabled:opacity-70 disabled:cursor-not-allowed disabled:transform-none"
         >
           {status === "sending" ? (
