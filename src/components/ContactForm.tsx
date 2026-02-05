@@ -200,16 +200,14 @@ export function ContactForm() {
           />
         </div>
 
-        {/* Turnstile Widget */}
-        <div className="flex justify-center">
-          <Turnstile
-            siteKey={process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY || ""}
-            onSuccess={(token) => setTurnstileToken(token)}
-            options={{
-              theme: "auto",
-            }}
-          />
-        </div>
+        {/* Turnstile Widget - Invisible Mode */}
+        <Turnstile
+          siteKey={process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY || ""}
+          onSuccess={(token) => setTurnstileToken(token)}
+          options={{
+            size: "invisible",
+          }}
+        />
 
         {/* Submit Button */}
         <button
