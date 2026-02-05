@@ -575,7 +575,7 @@ export default function Home() {
               </ul>
             </div>
 
-            <div className="border-t border-white/5">
+            <div>
               <div className="flex justify-end pt-2 mb-2">
                 <a
                   href="/cv/ChrisKang_CV.pdf"

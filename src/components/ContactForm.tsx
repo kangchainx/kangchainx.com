@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import {
   User,
   Envelope,
@@ -10,12 +10,13 @@ import {
   CheckCircle,
 } from "@phosphor-icons/react";
 import { sendEmail } from "@/app/actions";
-import { Turnstile } from "@marsidev/react-turnstile";
+import { Turnstile, type TurnstileInstance } from "@marsidev/react-turnstile";
 
 export function ContactForm() {
   const [status, setStatus] = useState<"idle" | "sending" | "success">("idle");
   const [errors, setErrors] = useState<{ name?: string; email?: string; message?: string }>({});
   const [turnstileToken, setTurnstileToken] = useState<string>("");
+  const turnstileRef = useRef<TurnstileInstance>(null);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -200,21 +201,29 @@ export function ContactForm() {
           />
         </div>
 
-        {/* Turnstile Widget */}
-        <div className="flex justify-center">
-          <Turnstile
-            siteKey={process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY || ""}
-            onSuccess={(token) => setTurnstileToken(token)}
-            options={{
-              theme: "auto",
-            }}
-          />
-        </div>
+        {/* Turnstile Widget - Invisible Mode with auto-execution on render */}
+        <Turnstile
+          ref={turnstileRef}
+          siteKey={process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY || ""}
+          onSuccess={(token) => setTurnstileToken(token)}
+          onExpire={() => {
+            setTurnstileToken("");
+            turnstileRef.current?.reset();
+          }}
+          onError={() => {
+            setTurnstileToken("");
+            turnstileRef.current?.reset();
+          }}
+          options={{
+            size: "invisible",
+            execution: "render",
+          }}
+        />
 
         {/* Submit Button */}
         <button
           type="submit"
-          disabled={status === "sending" || !turnstileToken}
+          disabled={status === "sending"}
           className="w-full bg-zinc-900 text-white hover:bg-zinc-800 dark:bg-zinc-800 dark:text-zinc-100 dark:hover:bg-zinc-700 active:scale-[0.98] transition-all duration-200 rounded-xl py-4 font-bold tracking-wide flex items-center justify-center gap-2 shadow-lg hover:shadow-xl disabled:opacity-70 disabled:cursor-not-allowed disabled:transform-none"
         >
           {status === "sending" ? (
