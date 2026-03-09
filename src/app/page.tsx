@@ -376,7 +376,7 @@ export default function Home() {
           <div className="text-lg md:text-2xl font-medium text-zinc-500 leading-relaxed min-h-[1.6em] max-w-2xl">
             <Typewriter
               texts={[
-                "an Indie Hacker",
+                // "an Indie Hacker",
                 "a Full-Stack Software Engineer",
                 "an AI-Powered Developer",
                 "a Frenchie Lover 🐶",
@@ -517,8 +517,8 @@ export default function Home() {
               </p>
               <ul className="space-y-3 mt-4">
                 <li className="flex items-start gap-3">
-                  <span className="shrink-0">🎒</span>
-                  <span>I am currently a freelancer.</span>
+                  <span className="shrink-0">🧑🏻‍💻</span>
+                  <span>Currently working at an AIGC startup.</span>
                 </li>
                 <li className="flex items-start gap-3">
                   <span className="shrink-0">🎸</span>
@@ -533,10 +533,9 @@ export default function Home() {
                   <span>Always open to new opportunities.</span>
                 </li>
                 <li className="flex items-start gap-3">
-                  <span className="shrink-0">👥</span>
+                  <span className="shrink-0">😀</span>
                   <span>
-                    I&apos;m actively looking to contribute to the open-source
-                    community
+                   Enjoy building and sharing within the open-source community.
                   </span>
                 </li>
                 <li className="flex items-start gap-3">
@@ -576,7 +575,7 @@ export default function Home() {
             </div>
 
             <div>
-              <div className="flex justify-end pt-2 mb-2">
+              <div className="hidden justify-end pt-2 mb-2">
                 <a
                   href="/cv/ChrisKang_CV.pdf"
                   target="_blank"
