@@ -12,11 +12,26 @@ import {
 import { sendEmail } from "@/app/actions";
 import { Turnstile, type TurnstileInstance } from "@marsidev/react-turnstile";
 
+type ContactFormStatus = "idle" | "sending" | "success";
+type ContactFormErrors = {
+  name?: string;
+  email?: string;
+  message?: string;
+};
+
+const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+const TURNSTILE_SITE_KEY = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY || "";
+
 export function ContactForm() {
-  const [status, setStatus] = useState<"idle" | "sending" | "success">("idle");
-  const [errors, setErrors] = useState<{ name?: string; email?: string; message?: string }>({});
+  const [status, setStatus] = useState<ContactFormStatus>("idle");
+  const [errors, setErrors] = useState<ContactFormErrors>({});
   const [turnstileToken, setTurnstileToken] = useState<string>("");
   const turnstileRef = useRef<TurnstileInstance>(null);
+
+  const resetTurnstile = () => {
+    setTurnstileToken("");
+    turnstileRef.current?.reset();
+  };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -26,10 +41,10 @@ export function ContactForm() {
     const email = formData.get("email") as string;
     const message = formData.get("message") as string;
     
-    const newErrors: typeof errors = {};
+    const newErrors: ContactFormErrors = {};
     if (!name?.trim()) newErrors.name = "Please enter your full name.";
     if (!email?.trim()) newErrors.email = "Please enter your email address.";
-    else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) newErrors.email = "Please enter a valid email address.";
+    else if (!EMAIL_PATTERN.test(email)) newErrors.email = "Please enter a valid email address.";
     if (!message?.trim()) newErrors.message = "Please enter a message.";
 
     if (Object.keys(newErrors).length > 0) {
@@ -44,6 +59,7 @@ export function ContactForm() {
 
     setErrors({});
     setStatus("sending");
+    formData.set("cf-turnstile-response", turnstileToken);
 
     try {
       const result = await sendEmail(formData);
@@ -56,18 +72,18 @@ export function ContactForm() {
     } catch (error) {
       console.error("Submission error:", error);
       alert("Something went wrong. Please try again.");
+      resetTurnstile();
       setStatus("idle");
     }
   };
 
-  const handleInputChange = (field: keyof typeof errors) => {
+  const handleInputChange = (field: keyof ContactFormErrors) => {
     if (errors[field]) {
       setErrors(prev => ({ ...prev, [field]: undefined }));
     }
   };
 
   if (status === "success") {
-    // ... (keep success view same)
     return (
       <div className="w-full max-w-xl mx-auto min-h-[400px] flex flex-col items-center justify-center p-8 bg-card border border-border rounded-2xl shadow-xl animate-fade-in-up text-center">
         <div className="w-16 h-16 bg-green-500/10 text-green-500 rounded-full flex items-center justify-center mb-6">
@@ -82,7 +98,7 @@ export function ContactForm() {
         <button
           onClick={() => {
             setStatus("idle");
-            setTurnstileToken("");
+            resetTurnstile();
           }}
           className="mt-8 px-6 py-2 text-sm font-medium text-zinc-500 hover:text-foreground transition-colors"
         >
@@ -204,16 +220,10 @@ export function ContactForm() {
         {/* Turnstile Widget - Invisible Mode with auto-execution on render */}
         <Turnstile
           ref={turnstileRef}
-          siteKey={process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY || ""}
+          siteKey={TURNSTILE_SITE_KEY}
           onSuccess={(token) => setTurnstileToken(token)}
-          onExpire={() => {
-            setTurnstileToken("");
-            turnstileRef.current?.reset();
-          }}
-          onError={() => {
-            setTurnstileToken("");
-            turnstileRef.current?.reset();
-          }}
+          onExpire={resetTurnstile}
+          onError={resetTurnstile}
           options={{
             size: "invisible",
             execution: "render",

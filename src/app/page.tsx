@@ -3,11 +3,13 @@
 import React, { useState, useEffect } from "react";
 import { flushSync } from "react-dom";
 import Image from "next/image";
-import { HeartIcon, CaretDownIcon } from "@phosphor-icons/react";
+import { CaretDownIcon } from "@phosphor-icons/react";
 import { SocialIcon } from "@/components/SocialIcon";
 import { Typewriter } from "@/components/Typewriter";
 import { ContactForm } from "@/components/ContactForm";
 import { TechStack } from "@/components/TechStack";
+
+type Theme = "dark" | "light";
 
 // Define ViewTransition API types
 interface ViewTransition {
@@ -20,16 +22,43 @@ interface DocumentWithViewTransition {
   startViewTransition?: (callback: () => void) => ViewTransition;
 }
 
+const AVATAR_URL = "/avator/Frenchie_lines.png";
+
+const PROJECTS = [
+  {
+    title: "YouTube Analysis Platform",
+    category: "SaaS Platform ｜ Creator Efficiency",
+    image: "/projec-shot/youtube-analysis-project.png",
+    link: "https://github.com/kangchainx/youtube-analysis-project",
+  },
+  {
+    title: "Video Text Chrome Extension",
+    category: "Privacy-First | AI-Powered",
+    image: "/projec-shot/video-text-chrome-extension.png",
+    link: "https://github.com/kangchainx/video-text-chrome-extension",
+  },
+  {
+    title: "GitHub Studio",
+    category: "WYSIWYG | Markdown Rendering",
+    image: "/projec-shot/github-readme-studio.png",
+    link: "https://github.com/kangchainx/github-readme-studio",
+  },
+  {
+    title: "GitHub Christmas Kit",
+    category: "Holiday Vibes | Creative Ideas",
+    image: "/projec-shot/github-christmas-kit.png",
+    link: "https://github.com/kangchainx/github-christmas-kit",
+  },
+] as const;
+
 export default function Home() {
   const [scrolled, setScrolled] = useState(false);
-  const [theme, setTheme] = useState<"dark" | "light">("dark");
+  const [theme, setTheme] = useState<Theme>("dark");
   const [isBarking, setIsBarking] = useState(false);
   const [isTilting, setIsTilting] = useState<"left" | "right" | null>(null);
 
   const [avatarRotation, setAvatarRotation] = useState(0);
   const [hasShownScrollHint, setHasShownScrollHint] = useState(false);
-
-  const avatarUrl = "/avator/Frenchie_lines.png";
 
   const toggleTheme = (e: React.MouseEvent<HTMLButtonElement>) => {
     const newTheme = theme === "dark" ? "light" : "dark";
@@ -90,7 +119,7 @@ export default function Home() {
 
   useEffect(() => {
     // Check localStorage on mount
-    const savedTheme = localStorage.getItem("theme") as "dark" | "light" | null;
+    const savedTheme = localStorage.getItem("theme") as Theme | null;
     if (savedTheme) {
       // eslint-disable-next-line react-hooks/set-state-in-effect
       setTheme(savedTheme);
@@ -148,33 +177,6 @@ export default function Home() {
     return () => clearTimeout(timer);
   }, []);
 
-  const projects = [
-    {
-      title: "YouTube Analysis Platform",
-      category: "SaaS Platform ｜ Creator Efficiency",
-      image: "/projec-shot/youtube-analysis-project.png",
-      link: "https://github.com/kangchainx/youtube-analysis-project",
-    },
-    {
-      title: "Video Text Chrome Extension",
-      category: "Privacy-First | AI-Powered",
-      image: "/projec-shot/video-text-chrome-extension.png",
-      link: "https://github.com/kangchainx/video-text-chrome-extension",
-    },
-    {
-      title: "GitHub Studio",
-      // category: "Developer Tool / Visualization",
-      category: "WYSIWYG | Markdown Rendering",
-      image: "/projec-shot/github-readme-studio.png",
-      link: "https://github.com/kangchainx/github-readme-studio",
-    },
-    {
-      title: "GitHub Christmas Kit",
-      category: "Holiday Vibes | Creative Ideas",
-      image: "/projec-shot/github-christmas-kit.png",
-      link: "https://github.com/kangchainx/github-christmas-kit",
-    },
-  ];
   const handleNavClick = (
     e: React.MouseEvent<HTMLAnchorElement>,
     id: string,
@@ -220,7 +222,7 @@ export default function Home() {
           >
             <div className="w-10 h-10 rounded-2xl border border-white/10 overflow-hidden shadow-2xl group transition-colors">
               <Image
-                src={avatarUrl}
+                src={AVATAR_URL}
                 alt="Avatar"
                 width={40}
                 height={40}
@@ -247,7 +249,7 @@ export default function Home() {
                   style={{ transform: `rotate(${avatarRotation}deg)` }}
                 >
                   <Image
-                    src={avatarUrl}
+                    src={AVATAR_URL}
                     alt="Chris Kang"
                     width={28}
                     height={28}
@@ -359,7 +361,7 @@ export default function Home() {
             <div className="absolute inset-0 blur-2xl rounded-full scale-110 bg-zinc-400/10 [html[data-theme=dark]_&]:bg-blue-500/20"></div>
             <div className="w-24 h-24 md:w-28 md:h-28 rounded-[2.5rem] bg-card border-border shadow-2xl transition-all duration-300">
               <Image
-                src={avatarUrl}
+                src={AVATAR_URL}
                 alt="Chris Kang"
                 width={112}
                 height={112}
@@ -518,7 +520,7 @@ export default function Home() {
               <ul className="space-y-3 mt-4">
                 <li className="flex items-start gap-3">
                   <span className="shrink-0">🧑🏻‍💻</span>
-                  <span>Currently working at an AIGC startup.</span>
+                  <span>Currently working at Spira AI.</span>
                 </li>
                 <li className="flex items-start gap-3">
                   <span className="shrink-0">🎸</span>
@@ -605,7 +607,7 @@ export default function Home() {
           </h2>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 2xl:gap-10">
-          {projects.map((project, index) => (
+          {PROJECTS.map((project, index) => (
             <a
               key={index}
               href={project.link}

@@ -2,14 +2,36 @@
 
 import { Resend } from 'resend';
 
-const resend = new Resend(process.env.RESEND_API_KEY);
+const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+const CONTACT_RECIPIENT = 'kangchenhe666@gmail.com';
+const CONTACT_SENDER = 'Portfolio Contact <onboarding@resend.dev>';
+
+interface TurnstileVerifyResponse {
+  success: boolean;
+  [key: string]: unknown;
+}
+
+function getFormString(formData: FormData, key: string) {
+  const value = formData.get(key);
+  return typeof value === 'string' ? value.trim() : '';
+}
+
+function getRequiredEnv(key: string) {
+  const value = process.env[key];
+
+  if (!value) {
+    throw new Error(`Missing required environment variable: ${key}`);
+  }
+
+  return value;
+}
 
 export async function sendEmail(formData: FormData) {
-  const name = formData.get('name') as string;
-  const email = formData.get('email') as string;
-  const message = formData.get('message') as string;
-  const honeypot = formData.get('confirm_email') as string;
-  const turnstileToken = formData.get('cf-turnstile-response') as string;
+  const name = getFormString(formData, 'name');
+  const email = getFormString(formData, 'email');
+  const message = getFormString(formData, 'message');
+  const honeypot = getFormString(formData, 'confirm_email');
+  const turnstileToken = getFormString(formData, 'cf-turnstile-response');
 
   // 1. Honeypot Check (Silent Rejection)
   if (honeypot) {
@@ -21,22 +43,28 @@ export async function sendEmail(formData: FormData) {
     return { error: 'Please fill in all fields.' };
   }
 
+  if (!EMAIL_PATTERN.test(email)) {
+    return { error: 'Please enter a valid email address.' };
+  }
+
   // 2. Turnstile Verification
   if (!turnstileToken) {
     return { error: 'Security check failed. Please refresh and try again.' };
   }
 
   try {
+    const turnstileSecret = getRequiredEnv('TURNSTILE_SECRET_KEY');
+
     const verifyRes = await fetch('https://challenges.cloudflare.com/turnstile/v0/siteverify', {
       method: 'POST',
       body: new URLSearchParams({
-        secret: process.env.TURNSTILE_SECRET_KEY!,
+        secret: turnstileSecret,
         response: turnstileToken,
       }),
       headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
     });
 
-    const verifyData = await verifyRes.json();
+    const verifyData = (await verifyRes.json()) as TurnstileVerifyResponse;
     if (!verifyData.success) {
       console.error('Turnstile verification failed:', verifyData);
       return { error: 'Security verification failed.' };
@@ -48,9 +76,10 @@ export async function sendEmail(formData: FormData) {
 
   // 3. Send Email
   try {
-    const { data, error } = await resend.emails.send({
-      from: 'Portfolio Contact <onboarding@resend.dev>',
-      to: ['kangchenhe666@gmail.com'], 
+    const resend = new Resend(getRequiredEnv('RESEND_API_KEY'));
+    const { error } = await resend.emails.send({
+      from: CONTACT_SENDER,
+      to: [CONTACT_RECIPIENT],
       subject: `New Message from ${name}`,
       replyTo: email,
       text: `Name: ${name}\nEmail: ${email}\n\nMessage:\n${message}`,
