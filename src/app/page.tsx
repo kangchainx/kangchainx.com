@@ -378,9 +378,9 @@ export default function Home() {
           <div className="text-lg md:text-2xl font-medium text-zinc-500 leading-relaxed min-h-[1.6em] max-w-2xl">
             <Typewriter
               texts={[
-                // "an Indie Hacker",
-                "a Full-Stack Software Engineer",
-                "an AI-Powered Developer",
+                "a remote full-stack engineer",
+                "building AI agents at Spira",
+                "an open-source builder",
                 "a Frenchie Lover 🐶",
               ]}
             />
@@ -509,18 +509,18 @@ export default function Home() {
               <p>
                 Hello, I&apos;m{" "}
                 <span className="text-foreground font-bold">Chris Kang</span>, a
-                passionate{" "}
+                remote{" "}
                 <span className="font-bold text-foreground">
-                  full-stack developer
-                </span>
-                . I enjoy programming and building delightful products. I love
-                to experiment with new technologies and use them to solve
-                real-world problems.
+                  full-stack engineer
+                </span>{" "}
+                at Spira AI, a US-based AI startup. My work leans toward AI
+                agents: designing, building, and shipping them into real
+                products.
               </p>
               <ul className="space-y-3 mt-4">
                 <li className="flex items-start gap-3">
                   <span className="shrink-0">🧑🏻‍💻</span>
-                  <span>Currently working at Spira AI.</span>
+                  <span>Working remotely with Spira AI, focused on AI agents and products.</span>
                 </li>
                 <li className="flex items-start gap-3">
                   <span className="shrink-0">🎸</span>
@@ -531,13 +531,9 @@ export default function Home() {
                   <span>I have a Frenchie named Tiantong.</span>
                 </li>
                 <li className="flex items-start gap-3">
-                  <span className="shrink-0">🤝</span>
-                  <span>Always open to new opportunities.</span>
-                </li>
-                <li className="flex items-start gap-3">
                   <span className="shrink-0">😀</span>
                   <span>
-                   Enjoy building and sharing within the open-source community.
+                    Building and sharing in the open-source community on the side.
                   </span>
                 </li>
                 <li className="flex items-start gap-3">
