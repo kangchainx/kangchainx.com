@@ -40,9 +40,9 @@ export const Typewriter = ({
   }, [subIndex, index, isDeleting, texts, speed, delay]);
 
   return (
-    <span className={cn("relative font-medium text-accent", className)}>
+    <span className={cn("relative text-foreground", className)}>
       {texts[index].substring(0, subIndex)}
-      <span className="ml-1 inline-block w-[1.5px] h-[0.9em] bg-accent align-middle animate-pulse-fast"></span>
+      <span className="ml-1 inline-block w-[2px] h-[0.9em] bg-accent align-middle animate-pulse-fast"></span>
     </span>
   );
 };

@@ -2,11 +2,14 @@
 @custom-variant dark (&:where([data-theme=dark], [data-theme=dark] *));
 
 :root {
-  --background: #030303;
-  --foreground: #a1a1aa; /* zinc-400 */
-  --accent: #3b82f6; /* blue-500 */
-  --card-bg: rgba(9, 9, 11, 0.5);
-  --border-color: rgba(255, 255, 255, 0.05);
+  /* dark.design tokens — zinc scale, one accent */
+  --background: #09090b; /* zinc-950 */
+  --surface: #18181b; /* zinc-900 */
+  --foreground: #fafafa; /* zinc-50 */
+  --muted: #a1a1aa; /* zinc-400 */
+  --subtle: #71717a; /* zinc-500 */
+  --border-color: rgba(255, 255, 255, 0.1);
+  --accent: #3b82f6; /* blue-500 — the only accent */
 }
 
 ::view-transition-old(root),
@@ -20,18 +23,23 @@
 }
 
 [data-theme="light"] {
-  --background: #fdfdfd;
-  --foreground: #52525b; /* zinc-600 */
-  --accent: #2563eb; /* blue-600 */
-  --card-bg: rgba(244, 244, 245, 0.8);
-  --border-color: rgba(0, 0, 0, 0.08);
+  --background: #fafafa; /* zinc-50 */
+  --surface: #ffffff;
+  --foreground: #09090b; /* zinc-950 */
+  --muted: #52525b; /* zinc-600 */
+  --subtle: #a1a1aa; /* zinc-400 */
+  --border-color: rgba(0, 0, 0, 0.1);
+  --accent: #3b82f6;
 }
 
 @theme {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
+  --color-surface: var(--surface);
+  --color-card: var(--surface);
+  --color-muted: var(--muted);
+  --color-subtle: var(--subtle);
   --color-accent: var(--accent);
-  --color-card: var(--card-bg);
   --color-border: var(--border-color);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
@@ -42,8 +50,11 @@
   * {
     @apply border-border transition-colors duration-300;
   }
+  html {
+    scroll-behavior: smooth;
+  }
   body {
-    @apply bg-background text-foreground antialiased selection:bg-accent/30 selection:text-white;
+    @apply bg-background text-muted antialiased selection:bg-accent/30 selection:text-foreground;
     font-family:
       ui-sans-serif,
       system-ui,
@@ -59,13 +70,22 @@
       "Segoe UI Emoji",
       "Segoe UI Symbol",
       "Noto Color Emoji";
+    font-feature-settings: "ss01", "cv11";
   }
 }
 
-@layer utilities {
-  .noise-bg {
-    background-image: url("https://grainy-gradients.vercel.app/noise.svg");
-    opacity: 0.03;
+@layer components {
+  /* Type scale: display → section → eyebrow. Rhythm comes from these, not ornaments. */
+  .type-display {
+    @apply text-foreground font-semibold tracking-[-0.04em] leading-[0.95];
+    font-size: clamp(3rem, 9vw, 7.5rem);
+  }
+  .type-section {
+    @apply text-foreground font-semibold tracking-[-0.03em] leading-[1.05];
+    font-size: clamp(2rem, 4.5vw, 3.5rem);
+  }
+  .type-eyebrow {
+    @apply font-mono text-[11px] uppercase tracking-[0.2em] text-subtle;
   }
 }
 
@@ -98,10 +118,6 @@
   }
 }
 
-.animate-spin-slow {
-  animation: spin 15s linear infinite;
-}
-
 @keyframes bark-animation {
   0% {
     opacity: 0;
@@ -119,37 +135,6 @@
 
 .animate-bark-fade {
   animation: bark-animation 0.8s ease-out forwards;
-}
-
-@keyframes wave {
-  0% {
-    transform: rotate(0deg);
-  }
-  20% {
-    transform: rotate(14deg);
-  }
-  40% {
-    transform: rotate(-8deg);
-  }
-  60% {
-    transform: rotate(14deg);
-  }
-  80% {
-    transform: rotate(-4deg);
-  }
-  100% {
-    transform: rotate(0deg);
-  }
-}
-
-.animate-waving-hand {
-  animation-name: wave;
-  animation-duration: 2.5s;
-  animation-delay: 1s;
-  animation-timing-function: ease-in-out;
-  animation-iteration-count: 1;
-  transform-origin: 70% 70%;
-  display: inline-block;
 }
 
 /* Shake Animation - Apple Style (Subtle & Fast) */
