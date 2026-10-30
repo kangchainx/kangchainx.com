@@ -74,19 +74,27 @@
   }
 }
 
-@layer components {
-  /* Type scale: display → section → eyebrow. Rhythm comes from these, not ornaments. */
-  .type-display {
-    @apply text-foreground font-semibold tracking-[-0.04em] leading-[0.95];
-    font-size: clamp(3rem, 9vw, 7.5rem);
-  }
-  .type-section {
-    @apply text-foreground font-semibold tracking-[-0.03em] leading-[1.05];
-    font-size: clamp(2rem, 4.5vw, 3.5rem);
-  }
-  .type-eyebrow {
-    @apply font-mono text-[11px] uppercase tracking-[0.2em] text-subtle;
-  }
+/* Type scale — plain CSS (Tailwind v4 empties @layer components custom rules). */
+.type-display {
+  color: var(--foreground);
+  font-weight: 600;
+  letter-spacing: -0.04em;
+  line-height: 0.95;
+  font-size: clamp(3rem, 9vw, 7.5rem);
+}
+.type-section {
+  color: var(--foreground);
+  font-weight: 600;
+  letter-spacing: -0.03em;
+  line-height: 1.05;
+  font-size: clamp(2rem, 4.5vw, 3.5rem);
+}
+.type-eyebrow {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  color: var(--subtle);
 }
 
 @keyframes fade-in-up {
