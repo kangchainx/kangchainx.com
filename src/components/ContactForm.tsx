@@ -85,14 +85,14 @@ export function ContactForm() {
 
   if (status === "success") {
     return (
-      <div className="w-full max-w-xl mx-auto min-h-[400px] flex flex-col items-center justify-center p-8 bg-card border border-border rounded-2xl shadow-xl animate-fade-in-up text-center">
-        <div className="w-16 h-16 bg-green-500/10 text-green-500 rounded-full flex items-center justify-center mb-6">
+      <div className="w-full min-h-[400px] flex flex-col items-center justify-center p-8 bg-surface border border-border rounded-2xl animate-fade-in-up text-center">
+        <div className="w-16 h-16 bg-accent/10 text-accent rounded-full flex items-center justify-center mb-6">
           <CheckCircle size={32} weight="fill" />
         </div>
-        <h3 className="text-2xl font-bold text-foreground mb-2">
+        <h3 className="text-2xl font-semibold tracking-tight text-foreground mb-2">
           Message Sent!
         </h3>
-        <p className="text-zinc-500 max-w-xs mx-auto">
+        <p className="text-subtle max-w-xs mx-auto">
           Thanks for reaching out. I&apos;ll get back to you as soon as possible.
         </p>
         <button
@@ -100,7 +100,7 @@ export function ContactForm() {
             setStatus("idle");
             resetTurnstile();
           }}
-          className="mt-8 px-6 py-2 text-sm font-medium text-zinc-500 hover:text-foreground transition-colors"
+          className="mt-8 px-6 py-2 text-sm font-medium text-subtle hover:text-foreground transition-colors"
         >
           Send another message
         </button>
@@ -109,7 +109,7 @@ export function ContactForm() {
   }
 
   return (
-    <div className="w-full max-w-xl mx-auto bg-card border border-border rounded-2xl shadow-xl p-6 md:p-10 transition-all duration-300 text-left">
+    <div className="w-full bg-surface border border-border rounded-2xl p-6 md:p-8 transition-all duration-300 text-left">
       <form onSubmit={handleSubmit} className="space-y-6" noValidate>
         {/* Name Field */}
         <div className="flex flex-col gap-2">
@@ -120,7 +120,7 @@ export function ContactForm() {
             Full Name
           </label>
           <div className={`relative group ${errors.name ? 'animate-shake' : ''}`}>
-            <div className={`absolute left-4 top-1/2 -translate-y-1/2 transition-colors ${errors.name ? 'text-red-500' : 'text-zinc-500 group-focus-within:text-blue-500'}`}>
+            <div className={`absolute left-4 top-1/2 -translate-y-1/2 transition-colors ${errors.name ? 'text-red-500' : 'text-subtle group-focus-within:text-accent'}`}>
               <User size={20} />
             </div>
             <input
@@ -129,22 +129,22 @@ export function ContactForm() {
               name="name"
               onChange={() => handleInputChange('name')}
               placeholder="John Doe"
-              className={`w-full bg-zinc-50 dark:bg-white/5 border rounded-xl py-3.5 pl-12 pr-4 text-foreground placeholder:text-zinc-400 dark:placeholder:text-zinc-500 focus:outline-none focus:ring-2 transition-all duration-300 ${
+              className={`w-full bg-background border rounded-xl py-3.5 pl-12 pr-4 text-foreground placeholder:text-subtle focus:outline-none focus:ring-2 transition-all duration-300 ${
                 errors.name 
                   ? 'border-red-500/50 focus:border-red-500 focus:ring-red-500/20' 
-                  : 'border-zinc-200 dark:border-white/10 focus:ring-blue-500/20 focus:border-blue-500'
+                  : 'border-border focus:ring-accent/20 focus:border-accent'
               }`}
             />
           </div>
           {errors.name ? (
             <p className="text-xs text-red-500 ml-1 animate-fade-in-up">{errors.name}</p>
           ) : (
-            <p className="text-xs text-zinc-500 ml-1">Tell me your name.</p>
+            <p className="text-xs text-subtle ml-1">Tell me your name.</p>
           )}
         </div>
 
         {/* Email Field */}
-        <div className="flex flex-col gap-4">
+        <div className="flex flex-col gap-2">
           <label
             htmlFor="email"
             className="text-sm font-medium text-foreground"
@@ -152,7 +152,7 @@ export function ContactForm() {
             Email Address
           </label>
           <div className={`relative group ${errors.email ? 'animate-shake' : ''}`}>
-            <div className={`absolute left-4 top-1/2 -translate-y-1/2 transition-colors ${errors.email ? 'text-red-500' : 'text-zinc-500 group-focus-within:text-blue-500'}`}>
+            <div className={`absolute left-4 top-1/2 -translate-y-1/2 transition-colors ${errors.email ? 'text-red-500' : 'text-subtle group-focus-within:text-accent'}`}>
               <Envelope size={20} />
             </div>
             <input
@@ -161,22 +161,22 @@ export function ContactForm() {
               name="email"
               onChange={() => handleInputChange('email')}
               placeholder="john@example.com"
-              className={`w-full bg-zinc-50 dark:bg-white/5 border rounded-xl py-3.5 pl-12 pr-4 text-foreground placeholder:text-zinc-400 dark:placeholder:text-zinc-500 focus:outline-none focus:ring-2 transition-all duration-300 ${
+              className={`w-full bg-background border rounded-xl py-3.5 pl-12 pr-4 text-foreground placeholder:text-subtle focus:outline-none focus:ring-2 transition-all duration-300 ${
                 errors.email 
                   ? 'border-red-500/50 focus:border-red-500 focus:ring-red-500/20' 
-                  : 'border-zinc-200 dark:border-white/10 focus:ring-blue-500/20 focus:border-blue-500'
+                  : 'border-border focus:ring-accent/20 focus:border-accent'
               }`}
             />
           </div>
           {errors.email ? (
             <p className="text-xs text-red-500 ml-1 animate-fade-in-up">{errors.email}</p>
           ) : (
-            <p className="text-xs text-zinc-500 ml-1">So I can reply to you.</p>
+            <p className="text-xs text-subtle ml-1">So I can reply to you.</p>
           )}
         </div>
 
         {/* Message Field */}
-        <div className="flex flex-col gap-4">
+        <div className="flex flex-col gap-2">
           <label
             htmlFor="message"
             className="text-sm font-medium text-foreground"
@@ -184,7 +184,7 @@ export function ContactForm() {
             Message
           </label>
           <div className={`relative group ${errors.message ? 'animate-shake' : ''}`}>
-            <div className={`absolute left-4 top-4 transition-colors ${errors.message ? 'text-red-500' : 'text-zinc-500 group-focus-within:text-blue-500'}`}>
+            <div className={`absolute left-4 top-4 transition-colors ${errors.message ? 'text-red-500' : 'text-subtle group-focus-within:text-accent'}`}>
               <ChatText size={20} />
             </div>
             <textarea
@@ -193,17 +193,17 @@ export function ContactForm() {
               rows={4}
               onChange={() => handleInputChange('message')}
               placeholder="Type your message here"
-              className={`w-full bg-zinc-50 dark:bg-white/5 border rounded-xl py-3.5 pl-12 pr-4 text-foreground placeholder:text-zinc-400 dark:placeholder:text-zinc-500 focus:outline-none focus:ring-2 transition-all duration-300 resize-none ${
+              className={`w-full bg-background border rounded-xl py-3.5 pl-12 pr-4 text-foreground placeholder:text-subtle focus:outline-none focus:ring-2 transition-all duration-300 resize-none ${
                 errors.message 
                   ? 'border-red-500/50 focus:border-red-500 focus:ring-red-500/20' 
-                  : 'border-zinc-200 dark:border-white/10 focus:ring-blue-500/20 focus:border-blue-500'
+                  : 'border-border focus:ring-accent/20 focus:border-accent'
               }`}
             />
           </div>
           {errors.message ? (
             <p className="text-xs text-red-500 ml-1 animate-fade-in-up">{errors.message}</p>
           ) : (
-            <p className="text-xs text-zinc-500 ml-1">What&apos;s on your mind?</p>
+            <p className="text-xs text-subtle ml-1">What&apos;s on your mind?</p>
           )}
         </div>
 
@@ -234,7 +234,7 @@ export function ContactForm() {
         <button
           type="submit"
           disabled={status === "sending"}
-          className="w-full bg-zinc-900 text-white hover:bg-zinc-800 dark:bg-zinc-800 dark:text-zinc-100 dark:hover:bg-zinc-700 active:scale-[0.98] transition-all duration-200 rounded-xl py-4 font-bold tracking-wide flex items-center justify-center gap-2 shadow-lg hover:shadow-xl disabled:opacity-70 disabled:cursor-not-allowed disabled:transform-none"
+          className="w-full bg-foreground text-background hover:opacity-90 active:scale-[0.98] transition-all duration-200 rounded-xl py-3.5 font-medium flex items-center justify-center gap-2 disabled:opacity-70 disabled:cursor-not-allowed disabled:transform-none"
         >
           {status === "sending" ? (
             <>

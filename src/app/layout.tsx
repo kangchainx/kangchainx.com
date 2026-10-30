@@ -2,9 +2,9 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Chris Kang | Developer",
+  title: "Chris Kang | Remote with Spira",
   description:
-    "Minimalist portfolio of Chris Kang, a Tokyo-based software architect who believes beauty lies in performance.",
+    "Remote full-stack engineer at Spira AI, building AI agents and products. Open-source on the side.",
   icons: {
     icon: [
       { url: "/favicon/favicon.ico" },
